@@ -133,36 +133,17 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .dz:hover,.dz.ov{border-color:var(--accent);background:var(--accent-glow);color:var(--text2);transform:scale(1.01)}
 .dz:active{transform:scale(.99)}
 .dz input{display:none}
+.dz.pm-wx{border-color:rgba(7,193,96,.45)}.dz.pm-wx:hover,.dz.pm-wx.ov{border-color:#07c160;background:rgba(7,193,96,.1);color:var(--text)}
+.dz.pm-ali{border-color:rgba(22,119,255,.45)}.dz.pm-ali:hover,.dz.pm-ali.ov{border-color:#1677ff;background:rgba(22,119,255,.1);color:var(--text)}
+.pm-link{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);word-break:break-all;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.5}
+.pm-link b{color:var(--text2);font-weight:600}
+.theme-pills{display:flex;gap:8px;flex-wrap:wrap}
 .dz .preview{max-width:56px;max-height:56px;border-radius:10px;margin:0 auto 8px;display:block}
 .dz .fname{font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--text3)}
 .logo-strip{display:flex;align-items:center;gap:10px;margin-top:10px}
 .logo-strip img{width:38px;height:38px;border-radius:10px;object-fit:contain;border:1px solid var(--border)}
 .logo-strip .remove{font-size:.72rem;color:var(--accent);cursor:pointer;font-weight:600}
 .sep{border:none;border-top:1px solid var(--border);margin:18px 0}
-.src-tabs{display:flex;gap:2px;background:var(--surface2);border-radius:var(--radius);padding:4px;margin-bottom:14px}
-.src-tab{flex:1;text-align:center;padding:9px;font-size:.78rem;font-weight:500;border-radius:10px;cursor:pointer;color:var(--text3);transition:all .22s}
-.src-tab.on{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.12);font-weight:600}
-.src-tab:not(.on):hover{color:var(--text2)}
-.src-tb{display:none}.src-tb.on{display:block}
-.status{font-size:.78rem;color:var(--text3);font-family:'JetBrains Mono',monospace;text-align:center;min-height:1.2em;margin:8px 0 16px}.status.err{color:var(--err)}
-.qr-frame{background:#fff;border-radius:var(--radius-lg);padding:18px;max-width:440px;margin:0 auto 16px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.qr-frame canvas{display:block;width:100%;height:auto;border-radius:10px}
-.carousel{display:flex;gap:10px;overflow-x:auto;padding:6px 0 16px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.vcard{flex:0 0 100px;cursor:pointer;scroll-snap-align:start;transition:transform .2s}
-.vcard:hover{transform:translateY(-2px)}
-.vcard.sel{transform:scale(1.05)}
-.vcard .vthumb{background:#fff;border-radius:var(--radius);padding:5px;border:2px solid transparent;transition:border-color .2s;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-.vcard.sel .vthumb{border-color:var(--accent)}
-.vcard .vthumb canvas{display:block;width:100%;height:auto;border-radius:8px}
-.vcard .vlabel{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-top:5px}
-.vcard.sel .vlabel{color:var(--accent);font-weight:600}
-.src-info{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);font-size:.8rem;color:var(--text2);margin-bottom:14px}
-.src-info img{width:34px;height:34px;border-radius:10px;object-fit:contain}
-.pal{display:flex;gap:3px;margin-left:auto}
-.pal .sw{width:12px;height:12px;border-radius:4px;border:1px solid var(--border)}
-.adv-toggle{text-align:center;margin-bottom:16px}
-.adv-toggle button{background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:9px 20px;color:var(--text3);font-size:.78rem;cursor:pointer;font-weight:600;transition:all .22s}
-.adv-toggle button:hover{border-color:var(--accent);color:var(--text2);transform:translateY(-1px)}
 .adv-panel{display:none;margin-bottom:16px}.adv-panel.open{display:block;animation:secIn .3s ease}
 /* 主按钮: iOS 蓝渐变 */
 .gen-btn{width:100%;padding:15px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .22s cubic-bezier(.32,.72,.35,1);margin-bottom:20px;letter-spacing:.02em;box-shadow:0 10px 28px var(--accent-glow)}
@@ -196,8 +177,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   </div>
   <div class="mode-bar">
     <button class="mode-btn on" data-mode="standard" onclick="setMode('standard')">标准<span class="sub">经典二维码</span></button>
-    <button class="mode-btn" data-mode="chroma" onclick="setMode('chroma')">ChromaCode<span class="sub">图像融合马赛克</span></button>
-    <button class="mode-btn" data-mode="scanner" onclick="setMode('scanner')">扫码<span class="sub">读取并解码二维码</span></button>
+    <button class="mode-btn" data-mode="scanner" onclick="setMode('scanner')">解析二维码<span class="sub">读取并解码二维码</span></button>
     <button class="mode-btn" data-mode="paymerge" onclick="setMode('paymerge')">合并收款码<span class="sub">微信+支付宝二合一</span></button>
   </div>
 
@@ -269,7 +249,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     </div>
     <div class="link-box" id="std-link-box"><div class="link-label">编码数据</div><div class="link-val" id="std-link-val"></div><button class="copy-btn" onclick="copyLink()">复制</button></div>
     <div class="card">
-      <div class="dp" id="dp-imgqr"><div class="field"><label>上传图片</label><div class="dz" id="iq-dz"><span id="iq-tip">点击或拖放上传图片（≤5MB）</span><input type="file" id="iq-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="iq-msg"></div><div class="hint">上传后生成二维码，手机扫码即可查看图片。图片保存在云端，可长期访问。</div></div></div>
+      <div class="dp" id="dp-imgqr"><div class="field"><label>图片链接</label><input class="inp" id="iq-url" placeholder="https://example.com/image.jpg" spellcheck="false"><div class="val-msg" id="iq-msg"></div><div class="hint">填入图片的直链地址，生成二维码后手机扫码即可打开查看。<br>本工具为纯在线处理，不存储任何图片与数据 — 有图床请用自己的图床，没有可自行搜索免费图床。</div></div></div>
       <div class="card-title">样式与颜色</div>
       <div class="row r3">
         <div class="field"><label>二维码颜色</label><input type="color" class="inp" id="std-fg" value="#000000"></div>
@@ -279,7 +259,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
       <div class="presets" id="color-presets"><div class="preset" data-fg="#000000" data-bg="#ffffff" style="background:#fff"><div class="fg" style="background:#000"></div></div><div class="preset" data-fg="#ffffff" data-bg="#000000" style="background:#000"><div class="fg" style="background:#fff"></div></div><div class="preset" data-fg="#1a365d" data-bg="#e2e8f0" style="background:#e2e8f0"><div class="fg" style="background:#1a365d"></div></div><div class="preset" data-fg="#7c2d12" data-bg="#fef3c7" style="background:#fef3c7"><div class="fg" style="background:#7c2d12"></div></div><div class="preset" data-fg="#166534" data-bg="#dcfce7" style="background:#dcfce7"><div class="fg" style="background:#166534"></div></div><div class="preset" data-fg="#7e22ce" data-bg="#f3e8ff" style="background:#f3e8ff"><div class="fg" style="background:#7e22ce"></div></div><div class="preset" data-fg="#0369a1" data-bg="#e0f2fe" style="background:#e0f2fe"><div class="fg" style="background:#0369a1"></div></div></div>
       <div class="contrast-warn" id="contrast-warn">⚠ 对比度过低 — 可能影响扫码</div>
       <hr class="sep">
-      <div class="row r3"><div class="field"><label>分辨率</label><select class="inp" id="std-res"><option value="256">256px</option><option value="512" selected>512px</option><option value="1024">1024px</option><option value="2048">2048px</option></select></div><div class="field"><label>模板</label><select class="inp" id="std-tmpl"><option value="classic">⬛ 经典方块</option><option value="rounded">🔳 圆角</option><option value="dots">⚫ 墨点</option><option value="droplet">💧 水滴</option><option value="neon">🌈 霓虹渐变</option></select></div><div class="field"><label>中心 Logo</label><div class="dz" id="std-logo-dz" style="padding:8px;font-size:.74rem"><span id="std-logo-prompt">点击上传</span><input type="file" id="std-logo-fi" accept="image/*"></div></div></div>
+      <div class="row r3"><div class="field"><label>分辨率</label><select class="inp" id="std-res"><option value="256">256px</option><option value="512" selected>512px</option><option value="1024">1024px</option><option value="2048">2048px</option></select></div><div class="field"><label>模板</label><select class="inp" id="std-tmpl"><option value="classic">⬛ 经典方块</option><option value="rounded">🔳 圆角</option><option value="dots">⚫ 墨点</option><option value="diamond">🔷 菱形</option><option value="neon">🌈 霓虹渐变</option></select></div><div class="field"><label>中心 Logo</label><div class="dz" id="std-logo-dz" style="padding:8px;font-size:.74rem"><span id="std-logo-prompt">点击上传</span><input type="file" id="std-logo-fi" accept="image/*"></div></div></div>
       <div id="std-logo-strip" class="logo-strip" style="display:none"><img id="std-logo-preview"><span class="remove" onclick="clearStdLogo()">✕ 移除</span></div>
       <hr class="sep">
       <div class="field"><label>描边宽度 — <span class="rv" id="stroke-val">0%</span></label><input type="range" id="std-stroke" min="0" max="13" value="0"></div>
@@ -296,49 +276,16 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     </div>
   </div>
 
-  <!-- ══════ CHROMACODE ══════ -->
-  <div class="sec" id="sec-chroma">
-    <div class="card"><div class="field"><label>要编码的网址</label><input class="inp" id="cc-url" placeholder="https://example.com" spellcheck="false"><div class="val-msg" id="v-cc-url"></div></div></div>
-    <div class="card">
-      <div class="card-title">品牌图片</div>
-      <div class="src-tabs" id="cc-tabs"><div class="src-tab on" data-t="fav">网站图标</div><div class="src-tab" data-t="upl">上传</div><div class="src-tab" data-t="iu">图片链接</div></div>
-      <div id="cc-t-fav" class="src-tb on"><p style="font-size:.78rem;color:var(--text3)">自动从上方网址获取网站图标。</p></div>
-      <div id="cc-t-upl" class="src-tb"><div class="dz" id="cc-dz"><span id="cc-dp">拖放图片或点击浏览</span><input type="file" id="cc-fi" accept="image/*"></div></div>
-      <div id="cc-t-iu" class="src-tb"><input class="inp" id="cc-iu" placeholder="https://example.com/logo.png" spellcheck="false"></div>
-    </div>
-    <div class="adv-toggle"><button onclick="document.getElementById('cc-adv').classList.toggle('open')">⚙ 高级设置</button></div>
-    <div id="cc-adv" class="adv-panel"><div class="card">
-      <div class="row r3"><div class="field"><label>圆点形状</label><select class="inp" id="cc-shp"><option value="circle">圆形</option><option value="rrect">圆角</option><option value="sq">方形</option></select></div><div class="field"><label><span class="tip">纠错等级 <span class="tip-icon">?</span><span class="tip-text"><strong>越高越可靠。</strong>ChromaCode 对圆点改动较大，建议用<strong>高</strong>。<br><br><strong>H (30%)</strong> — 最适合 ChromaCode。<br><strong>Q (25%)</strong> — 简单 Logo 可用。<br><strong>M (15%)</strong> — 混合后有风险。</span></span></label><select class="inp" id="cc-ecc"><option value="H" selected>高</option><option value="Q">较高</option><option value="M">中</option></select></div><div class="field"><label>输出尺寸</label><select class="inp" id="cc-osz"><option value="800">800px</option><option value="1024" selected>1024px</option><option value="1600">1600px</option><option value="2048">2048px</option></select></div></div>
-      <hr class="sep">
-      <div class="field"><label>深色点范围</label><div class="row r2"><div class="range-row"><input type="range" id="cc-dmn" min="15" max="60" value="30"><span class="rv" id="cc-vdmn">30%</span></div><div class="range-row"><input type="range" id="cc-dmx" min="70" max="110" value="105"><span class="rv" id="cc-vdmx">105%</span></div></div></div>
-      <div class="field"><label>幻影强度</label><div class="range-row"><input type="range" id="cc-gs" min="0" max="80" value="80"><span class="rv" id="cc-vgs">80%</span></div></div>
-      <div class="field"><label>幻影阈值</label><div class="range-row"><input type="range" id="cc-gt" min="0" max="60" value="8"><span class="rv" id="cc-vgt">8%</span></div></div>
-      <hr class="sep">
-      <div class="row r2"><div class="field"><label>背景颜色</label><input type="color" class="inp" id="cc-bgc" value="#ffffff"></div><div class="field"><label>备用深色</label><input type="color" class="inp" id="cc-fdc" value="#000000"></div></div>
-      <div class="field" style="margin-top:10px"><label class="chk"><input type="checkbox" id="cc-col" checked> 使用图片颜色</label></div>
-    </div></div>
-    <button class="gen-btn" id="cc-gen-btn" onclick="generateChroma()">生成 ChromaCode</button>
-    <div id="cc-status" class="status"></div>
-    <div class="preview-area" id="cc-preview-area">
-      <div id="cc-srcinfo" class="src-info" style="display:none"><img id="cc-sth"><span id="cc-sn">—</span><div class="pal" id="cc-pal"></div></div>
-      <div class="qr-frame"><canvas id="cc-main" width="1024" height="1024"></canvas></div>
-      <div class="carousel" id="cc-carousel"></div>
-      <div class="dl-row">
-        <button class="dl-btn" onclick="ccDlPNG()"><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PNG</button>
-        <button class="dl-btn" onclick="ccDlSVG()"><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>SVG</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ══════ PAYMERGE ══════ -->
   <div class="sec" id="sec-paymerge">
     <div class="card">
       <div class="card-title">合并收款码 <span style="font-weight:400;color:var(--text3);font-size:.75rem">微信 + 支付宝二合一</span></div>
       <p style="font-size:.8rem;color:var(--text2);line-height:1.7;margin-bottom:16px">分别上传你的<strong>微信收款码</strong>和<strong>支付宝收款码</strong>图片，工具会在本地解码校验后，用物理合并技术生成一张二合一收款码：微信扫走微信、支付宝扫走支付宝。<span style="color:var(--text3)">所有处理都在浏览器本地完成，图片不会上传。</span></p>
       <div class="row r2">
-        <div class="field"><label>微信收款码</label><div class="dz" id="pm-wx-dz"><span id="pm-wx-tip">点击上传微信收款码</span><input type="file" id="pm-wx-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-wx-msg"></div></div>
-        <div class="field"><label>支付宝收款码</label><div class="dz" id="pm-ali-dz"><span id="pm-ali-tip">点击上传支付宝收款码</span><input type="file" id="pm-ali-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-ali-msg"></div></div>
+        <div class="field"><label>微信收款码</label><div class="dz pm-wx" id="pm-wx-dz"><span id="pm-wx-tip">点击上传微信收款码</span><input type="file" id="pm-wx-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-wx-msg"></div><div class="pm-link" id="pm-wx-link" style="display:none"></div></div>
+        <div class="field"><label>支付宝收款码</label><div class="dz pm-ali" id="pm-ali-dz"><span id="pm-ali-tip">点击上传支付宝收款码</span><input type="file" id="pm-ali-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-ali-msg"></div><div class="pm-link" id="pm-ali-link" style="display:none"></div></div>
       </div>
+      <div class="field" style="margin-top:4px"><label>主题风格</label><div class="theme-pills" id="pm-theme-pills"><div class="pill on" data-pt="none">默认</div><div class="pill" data-pt="a">主题A</div><div class="pill" data-pt="b">主题B</div><div class="pill" data-pt="c">主题C</div><div class="pill" data-pt="d">主题D</div></div><div class="hint">主题A·支付宝蓝 / 主题B·微信绿 / 主题C·中国红 / 主题D·深邃夜 — 下载的 PNG 自带主题背景。</div></div>
       <div class="field" style="margin-top:4px"><label>支付宝码覆盖比例 <span id="pm-ratio-val" style="color:var(--accent);font-weight:600">50%</span></label><div class="range-row"><input type="range" id="pm-ratio" min="35" max="60" value="50"><span class="rv">35%–60%</span></div><div class="hint">覆盖越大支付宝越好认，但别超过微信码纠错能力。默认 50%。</div></div>
     </div>
     <div class="preview-area" id="pm-preview-area">
@@ -353,7 +300,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   <!-- ══════ SCANNER ══════ -->
   <div class="sec" id="sec-scanner">
     <div class="card">
-      <div class="card-title">扫描二维码</div>
+      <div class="card-title">解析二维码</div>
       <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px;line-height:1.6">用<strong>相机</strong>、<strong>图片文件</strong>或从剪贴板<strong>粘贴</strong>，解码任意二维码。所有处理都在本地完成——数据不会离开你的浏览器。<br><span style="color:var(--accent);font-weight:500">🇲🇾 完整 DuitNow 二维码解析</span> — 70 家收单机构/银行（PayNet 官方列表）、CRC 校验、小费/手续费解析、干净二维码重新生成。</p>
       <div style="margin-bottom:14px">
         <button class="gen-btn" id="cam-btn" onclick="toggleCamera()" style="margin-bottom:8px">📷 打开相机</button>
@@ -420,7 +367,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 
 </div>
 <div class="footer">
-  <a href="https://633668.xyz" target="_blank" style="font-weight:600">志远</a> 出品 · ChromaCode 算法：<a href="https://github.com/TomsNimanis/chromacode" target="_blank">Toms Nimanis / IT Linden</a> · DuitNow EMV 研究：<a href="https://github.com/natsu90/duitnowqr-test" target="_blank">natsu90</a><br>
+  <a href="https://633668.xyz" target="_blank" style="font-weight:600">志远</a> 出品 · DuitNow EMV 研究：<a href="https://github.com/natsu90/duitnowqr-test" target="_blank">natsu90</a><br>
   <span class="beian">东南亚金三角特区 字797号</span>
 </div>
 <script>
@@ -478,6 +425,7 @@ function validateAll(){
     case 'location':{const n=document.getElementById('loc-name').value.trim(),la=document.getElementById('loc-lat').value.trim(),ln=document.getElementById('loc-lng').value.trim();if(!n&&!la&&!ln)valid=false;if((la&&!ln)||(!la&&ln)){valid=false;vMsg('v-loc','需要同时填写纬度和经度','warn')}break}
     case 'calendar':{if(!document.getElementById('cal-title').value.trim()){valid=false;vMsg('v-cal-title','需要填写标题','err')}if(!document.getElementById('cal-sd').value){valid=false;vMsg('v-cal-sd','需要选择日期','err')}break}
     case 'vcard':{if(!document.getElementById('vc-fn').value.trim()&&!document.getElementById('vc-ln').value.trim()){valid=false;vMsg('v-vc-name','需要填写姓名','err')}const em=document.getElementById('vc-email').value.trim();if(em&&!isEmail(em)){valid=false;vMsg('v-vc-email','邮箱格式不正确','err')}break}
+    case 'imgqr':{let v=document.getElementById('iq-url').value.trim();if(!v){valid=false;break}if(!/^https?:\/\//i.test(v)&&v.includes('.')){v='https://'+v;document.getElementById('iq-url').value=v}if(!isUrl(v)){valid=false;vMsg('iq-msg','请输入有效的图片链接','err');document.getElementById('iq-url').classList.add('invalid')}else document.getElementById('iq-url').classList.add('valid');break}
     case 'duitnow':{
       if(!document.getElementById('dn-gen-acquirer').value){valid=false;vMsg('v-dn-acquirer','请选择收单机构','err')}
       if(!document.getElementById('dn-gen-qrid').value.trim()){valid=false;vMsg('v-dn-qrid','需要填写二维码 ID','err')}
@@ -505,7 +453,7 @@ function getStdData(){
     case 'calendar':{const t=document.getElementById('cal-title').value.trim();if(!t)return'';const allDay=document.getElementById('cal-allday').checked,sd=document.getElementById('cal-sd').value,st=document.getElementById('cal-st').value,ed=document.getElementById('cal-ed').value,et=document.getElementById('cal-et').value;const fmt=(d,ti)=>(d||'').replace(/-/g,'')+(allDay?'':'T'+(ti||'0000').replace(/:/g,'')+'00');let ics=`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${t}`;const desc=document.getElementById('cal-desc').value,loc=document.getElementById('cal-loc').value;if(desc)ics+=`\nDESCRIPTION:${desc}`;if(loc)ics+=`\nLOCATION:${loc}`;if(sd)ics+=`\nDTSTART:${fmt(sd,st)}`;if(ed)ics+=`\nDTEND:${fmt(ed,et)}`;else if(sd)ics+=`\nDTEND:${fmt(sd,et||st)}`;return ics+'\nEND:VEVENT\nEND:VCALENDAR'}
     case 'vcard':{const fn=document.getElementById('vc-fn').value.trim(),ln=document.getElementById('vc-ln').value.trim();if(!fn&&!ln)return'';let v=`BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn}\nFN:${fn} ${ln}`;const ph=document.getElementById('vc-phone').value.trim().replace(/[\s\-\(\)]/g,''),em=document.getElementById('vc-email').value.trim(),org=document.getElementById('vc-org').value.trim();let url=document.getElementById('vc-url').value.trim();if(ph)v+=`\nTEL:${document.getElementById('vc-cc').value}${ph}`;if(em)v+=`\nEMAIL:${em}`;if(org)v+=`\nORG:${org}`;if(url){if(!/^https?:\/\//i.test(url)&&url.includes('.'))url='https://'+url;v+=`\nURL:${url}`}return v+'\nEND:VCARD'}
     case 'duitnow':{return buildDuitNowEMV()}
-    case 'imgqr':{return window._imgqrUrl||''}
+    case 'imgqr':{const u=document.getElementById('iq-url').value.trim();return u}
   }
   return'';
 }
@@ -589,7 +537,7 @@ function drawStyledQR(ctx,qr,n,ox,oy,cell,fg,bg,style){
     if(style==='classic'){ctx.fillStyle=fill;ctx.fillRect(x,y,cell,cell)}
     else if(style==='rounded'){ctx.fillStyle=fill;const rad=cell*.32,g=cell*.06;ctx.beginPath();ctx.roundRect(x+g,y+g,cell-g*2,cell-g*2,rad);ctx.fill()}
     else if(style==='dots'){ctx.fillStyle=fill;ctx.beginPath();ctx.arc(x+cell/2,y+cell/2,cell*.48,0,7);ctx.fill()}
-    else if(style==='droplet'){ctx.fillStyle=fill;ctx.beginPath();ctx.ellipse(x+cell/2,y+cell/2,cell*.44,cell*.5,0,0,7);ctx.fill()}
+    else if(style==='diamond'){ctx.fillStyle=fill;const dcx=x+cell/2,dcy=y+cell/2,dr=cell*.46;ctx.beginPath();ctx.moveTo(dcx,dcy-dr);ctx.lineTo(dcx+dr,dcy);ctx.lineTo(dcx,dcy+dr);ctx.lineTo(dcx-dr,dcy);ctx.closePath();ctx.fill()}
     else if(style==='neon'){ctx.fillStyle=fill;const rad=cell*.3,g=cell*.05;ctx.beginPath();ctx.roundRect(x+g,y+g,cell-g*2,cell-g*2,rad);ctx.fill()}
   }
   // —— 定位角(3 个): 统一用方形/圆角方形, 确保所有扫码器都能识别 ——
@@ -623,13 +571,14 @@ function generateStandard(){
   let wifiLines=[];
   if(curType==='wifi'){if(document.getElementById('wifi-show-ssid').checked){const v=document.getElementById('wifi-ssid').value.trim();if(v)wifiLines.push('📶  '+v)}if(document.getElementById('wifi-show-pass').checked){const v=document.getElementById('wifi-pass').value;if(v)wifiLines.push('🔑  '+v)}if(document.getElementById('wifi-show-enc').checked){wifiLines.push('🔒  '+(document.getElementById('wifi-enc').value||'Open'))}}
   const lineH=Math.round(realSize*.06),textPad=wifiLines.length?Math.round(lineH*.6):0,extraH=wifiLines.length?(wifiLines.length*lineH+textPad*2):0;
-  canvas.width=realSize;canvas.height=realSize+extraH;
+  const outlinePad=outline?Math.max(10,Math.round(realSize*.05)):0;
+  canvas.width=realSize+outlinePad*2;canvas.height=realSize+extraH+outlinePad*2;
   const ctx=canvas.getContext('2d');ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);
-  const offset=quietMod*scale;
+  const offset=quietMod*scale+outlinePad;
   drawStyledQR(ctx,qr,modules,offset,offset,scale,fg,bg,tmpl);
-  if(outline){const gap=Math.max(4,Math.round(realSize*.02));ctx.strokeStyle=fg;ctx.lineWidth=Math.max(3,Math.round(realSize*.012));ctx.strokeRect(gap,gap,realSize-gap*2,realSize-gap*2)}
+  if(outline){const lw=Math.max(3,Math.round(realSize*.012));ctx.strokeStyle=fg;ctx.lineWidth=lw;const p=outlinePad/2;ctx.strokeRect(p,p,canvas.width-p*2,canvas.height-extraH-p*2)}
   if(stdLogoImg){const ls=(modules*scale)*.22,x=offset+(modules*scale-ls)/2,pad=ls*.1;ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(x-pad,x-pad,ls+pad*2,ls+pad*2,8);ctx.fill();ctx.drawImage(stdLogoImg,x,x,ls,ls)}
-  if(wifiLines.length){const fs=Math.round(lineH*.55);ctx.font=`500 ${fs}px "DM Sans",system-ui,sans-serif`;ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='top';ctx.strokeStyle=fg;ctx.globalAlpha=.2;ctx.lineWidth=Math.max(1,Math.round(realSize*.003));ctx.beginPath();ctx.moveTo(realSize*.15,realSize+textPad*.3);ctx.lineTo(realSize*.85,realSize+textPad*.3);ctx.stroke();ctx.globalAlpha=1;wifiLines.forEach((l,i)=>ctx.fillText(l,realSize/2,realSize+textPad+i*lineH))}
+  if(wifiLines.length){const fs=Math.round(lineH*.55);ctx.font=`500 ${fs}px "DM Sans",system-ui,sans-serif`;ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='top';ctx.strokeStyle=fg;ctx.globalAlpha=.2;ctx.lineWidth=Math.max(1,Math.round(realSize*.003));ctx.beginPath();ctx.moveTo(outlinePad+realSize*.15,outlinePad+realSize+textPad*.3);ctx.lineTo(outlinePad+realSize*.85,outlinePad+realSize+textPad*.3);ctx.stroke();ctx.globalAlpha=1;wifiLines.forEach((l,i)=>ctx.fillText(l,canvas.width/2,outlinePad+realSize+textPad+i*lineH))}
   const wifiDisp=document.getElementById('wifi-info-display');if(curType==='wifi'&&wifiLines.length){wifiDisp.style.display='block';document.getElementById('wifi-info-items').innerHTML=wifiLines.map(l=>`<div>${l}</div>`).join('')}else wifiDisp.style.display='none';
   document.getElementById('std-frame').className='qr-tmpl-frame';
   document.getElementById('std-preview-area').classList.add('on');
@@ -637,7 +586,7 @@ function generateStandard(){
 }
 
 // ═══════ LIVE LISTENERS ═══════
-['in-url','in-text','wifi-ssid','wifi-pass','em-to','em-sub','em-body','in-phone','sms-phone','sms-msg','wa-phone','wa-msg','loc-name','loc-lat','loc-lng','cal-title','cal-desc','cal-loc','cal-sd','cal-st','cal-ed','cal-et','vc-fn','vc-ln','vc-phone','vc-email','vc-org','vc-url','dn-gen-qrid','dn-gen-name','dn-gen-city','dn-gen-postal','dn-gen-amount','dn-gen-bill','dn-gen-store','dn-gen-ref','dn-gen-terminal'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',liveGenerate);el.addEventListener('change',liveGenerate)}});
+['in-url','in-text','iq-url','wifi-ssid','wifi-pass','em-to','em-sub','em-body','in-phone','sms-phone','sms-msg','wa-phone','wa-msg','loc-name','loc-lat','loc-lng','cal-title','cal-desc','cal-loc','cal-sd','cal-st','cal-ed','cal-et','vc-fn','vc-ln','vc-phone','vc-email','vc-org','vc-url','dn-gen-qrid','dn-gen-name','dn-gen-city','dn-gen-postal','dn-gen-amount','dn-gen-bill','dn-gen-store','dn-gen-ref','dn-gen-terminal'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',liveGenerate);el.addEventListener('change',liveGenerate)}});
 ['wifi-enc','ph-cc','sms-cc','wa-cc','vc-cc','std-ecc','std-res','std-tmpl','dn-gen-acquirer','dn-gen-mcc'].forEach(id=>document.getElementById(id).addEventListener('change',liveGenerate));
 ['wifi-hidden','cal-allday','std-outline','std-invert','wifi-show-ssid','wifi-show-pass','wifi-show-enc'].forEach(id=>document.getElementById(id).addEventListener('change',liveGenerate));
 document.getElementById('std-stroke').oninput=function(){document.getElementById('stroke-val').textContent=this.value+'%';liveGenerate()};
@@ -689,7 +638,7 @@ function renderDuitNowGen(raw){
 
 // ═══════ STANDARD DOWNLOADS ═══════
 function dlStdPNG(){const c=window._stdCanvas;if(!c)return;c.toBlob(b=>{const a=document.createElement('a');a.download='qr-code.png';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()},'image/png')}
-function dlStdSVG(){const d=window._stdData;if(!d)return;const ecc=window._stdEcc||'M',fg=window._stdFg||'#000',bg=window._stdBg||'#fff';const tmpl=document.getElementById('std-tmpl').value||'classic';const qr=qrcode(0,ecc);qr.addData(d);qr.make();const sz=qr.getModuleCount(),cell=10,t=sz*cell;let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 ${t} ${t}"><rect width="${t}" height="${t}" fill="${bg}"/>`;const eye=(r,c)=> (r<7&&c<7)||(r<7&&c>=sz-7)||(r>=sz-7&&c<7);for(let r=0;r<sz;r++)for(let c=0;c<sz;c++){if(!qr.isDark(r,c)||eye(r,c))continue;const x=c*cell,y=r*cell;if(tmpl==='dots')svg+=`<circle cx="${x+cell/2}" cy="${y+cell/2}" r="${cell*.48}" fill="${fg}"/>`;else if(tmpl==='droplet')svg+=`<ellipse cx="${x+cell/2}" cy="${y+cell/2}" rx="${cell*.44}" ry="${cell*.5}" fill="${fg}"/>`;else if(tmpl==='rounded'||tmpl==='neon')svg+=`<rect x="${x+cell*.06}" y="${y+cell*.06}" width="${cell*.88}" height="${cell*.88}" rx="${cell*.3}" fill="${fg}"/>`;else svg+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${fg}"/>`}
+function dlStdSVG(){const d=window._stdData;if(!d)return;const ecc=window._stdEcc||'M',fg=window._stdFg||'#000',bg=window._stdBg||'#fff';const tmpl=document.getElementById('std-tmpl').value||'classic';const qr=qrcode(0,ecc);qr.addData(d);qr.make();const sz=qr.getModuleCount(),cell=10,t=sz*cell;let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 ${t} ${t}"><rect width="${t}" height="${t}" fill="${bg}"/>`;const eye=(r,c)=> (r<7&&c<7)||(r<7&&c>=sz-7)||(r>=sz-7&&c<7);for(let r=0;r<sz;r++)for(let c=0;c<sz;c++){if(!qr.isDark(r,c)||eye(r,c))continue;const x=c*cell,y=r*cell;if(tmpl==='dots')svg+=`<circle cx="${x+cell/2}" cy="${y+cell/2}" r="${cell*.48}" fill="${fg}"/>`;else if(tmpl==='diamond'){const dcx=x+cell/2,dcy=y+cell/2,dr=cell*.46;svg+=`<polygon points="${dcx},${dcy-dr} ${dcx+dr},${dcy} ${dcx},${dcy+dr} ${dcx-dr},${dcy}" fill="${fg}"/>`;}else if(tmpl==='rounded'||tmpl==='neon')svg+=`<rect x="${x+cell*.06}" y="${y+cell*.06}" width="${cell*.88}" height="${cell*.88}" rx="${cell*.3}" fill="${fg}"/>`;else svg+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${fg}"/>`}
 const eyes=[[0,0],[0,sz-7],[sz-7,0]];const erad=tmpl==='classic'?0:cell*.9;for(const[er,ec]of eyes){const ex=ec*cell,ey=er*cell,es=cell*7;svg+=`<rect x="${ex}" y="${ey}" width="${es}" height="${es}" rx="${erad}" fill="${fg}"/><rect x="${ex+cell}" y="${ey+cell}" width="${es-cell*2}" height="${es-cell*2}" rx="${Math.max(0,erad-cell*.5)}" fill="${bg}"/><rect x="${ex+cell*2}" y="${ey+cell*2}" width="${es-cell*4}" height="${es-cell*4}" rx="${Math.max(0,erad-cell)}" fill="${fg}"/>`}
 svg+='</svg>';const b=new Blob([svg],{type:'image/svg+xml'});const a=document.createElement('a');a.download='qr-code.svg';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()}
 async function shareStd(){const c=window._stdCanvas;if(!c)return;try{const b=await new Promise(r=>c.toBlob(r,'image/png'));const f=new File([b],'qr-code.png',{type:'image/png'});if(navigator.canShare?.({files:[f]})){await navigator.share({files:[f]});return}}catch{}dlStdPNG()}
@@ -699,6 +648,9 @@ async function shareStd(){const c=window._stdCanvas;if(!c)return;try{const b=awa
 // ═══════════════════════════════════════
 const PM_WX_OK=['wxp://','weixin.qq.com','wechatpay.cn'];
 const PM_ALI_OK=['alipay.com'];
+const PM_THEMES={none:null,a:{bg:['#1677ff','#00c6ff'],qrScale:.6,title:'支付宝蓝'},b:{bg:['#07c160','#00d68f'],qrScale:.6,title:'微信绿'},c:{bg:['#e02020','#ff8a3d'],qrScale:.6,title:'中国红'},d:{bg:['#141432','#2b2b6b','#0f3460'],qrScale:.6,title:'深邃夜'}};
+let pmTheme='none';
+document.getElementById('pm-theme-pills').onclick=e=>{const p=e.target.closest('.pill');if(!p)return;document.querySelectorAll('#pm-theme-pills .pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');pmTheme=p.dataset.pt;pmTryMerge()};
 let pmWxData=null,pmAliData=null,pmMerged=null;
 function pmEnsureJsQR(cb){
   if(typeof jsQR!=='undefined'){cb();return}
@@ -706,17 +658,17 @@ function pmEnsureJsQR(cb){
   el.onload=()=>{jsQRLoaded=true;cb()};el.onerror=()=>{alert('jsQR 加载失败，请检查网络后重试')};
   document.head.appendChild(el);
 }
-function pmBind(dzId,fiId,tipId,msgId,whitelist,errLabel,assign){
+function pmBind(dzId,fiId,tipId,msgId,linkId,whitelist,errLabel,assign){
   const dz=document.getElementById(dzId),fi=document.getElementById(fiId);
   dz.onclick=()=>fi.click();
   dz.ondragover=e=>{e.preventDefault();dz.classList.add('ov')};
   dz.ondragleave=()=>dz.classList.remove('ov');
-  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])pmReadFile(e.dataTransfer.files[0],tipId,msgId,whitelist,errLabel,assign)};
-  fi.onchange=e=>{if(e.target.files[0])pmReadFile(e.target.files[0],tipId,msgId,whitelist,errLabel,assign);fi.value=''};
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])pmReadFile(e.dataTransfer.files[0],tipId,msgId,linkId,whitelist,errLabel,assign)};
+  fi.onchange=e=>{if(e.target.files[0])pmReadFile(e.target.files[0],tipId,msgId,linkId,whitelist,errLabel,assign);fi.value=''};
 }
-function pmReadFile(f,tipId,msgId,whitelist,errLabel,assign){
-  const msg=document.getElementById(msgId);
-  msg.textContent='';msg.className='val-msg';
+function pmReadFile(f,tipId,msgId,linkId,whitelist,errLabel,assign){
+  const msg=document.getElementById(msgId),linkEl=document.getElementById(linkId);
+  msg.textContent='';msg.className='val-msg';linkEl.style.display='none';
   if(!f.type.startsWith('image/')){msg.textContent='请上传图片文件';msg.classList.add('err');return}
   pmEnsureJsQR(()=>{
     const r=new FileReader();
@@ -728,7 +680,7 @@ function pmReadFile(f,tipId,msgId,whitelist,errLabel,assign){
         const low=code.toLowerCase();
         if(!whitelist.some(w=>low.includes(w))){msg.textContent='这不是'+errLabel+'收款码，请重新上传';msg.classList.add('err');return}
         document.getElementById(tipId).innerHTML='<img class="preview" src="'+e.target.result+'" style="max-height:90px;border-radius:8px">✓ 已识别';
-        msg.textContent='';assign(code);pmTryMerge();
+        msg.textContent='';linkEl.innerHTML='<b>解码链接：</b>'+String(code).replace(/</g,'&lt;');linkEl.style.display='block';assign(code);pmTryMerge();
       };
       img.onerror=()=>{msg.textContent='图片读取失败';msg.classList.add('err')};
       img.src=e.target.result;
@@ -764,14 +716,31 @@ async function pmTryMerge(){
   const ax=aliC.getContext('2d'),cw=(S/2)*0.9;
   ax.clearRect(S/2,S-cw,S/2,cw);
   const wxImg=await pmLoadCanvas(wxC),aliImg=await pmLoadCanvas(aliC);
-  const c=document.getElementById('pm-canvas');c.width=c.height=S;
-  const x=c.getContext('2d');
-  x.fillStyle='#fff';x.fillRect(0,0,S,S);
-  x.drawImage(wxImg,0,0,S,S);
+  // 先合并到离屏 canvas
+  const m=document.createElement('canvas');m.width=m.height=S;
+  const mx=m.getContext('2d');
+  mx.fillStyle='#fff';mx.fillRect(0,0,S,S);
+  mx.drawImage(wxImg,0,0,S,S);
   // 支付宝码旋转180°后叠放在微信码右下角
   const as=S*ratio;
-  x.save();x.translate(S-as/2,S-as/2);x.rotate(Math.PI);
-  x.drawImage(aliImg,-as/2,-as/2,as,as);x.restore();
+  mx.save();mx.translate(S-as/2,S-as/2);mx.rotate(Math.PI);
+  mx.drawImage(aliImg,-as/2,-as/2,as,as);mx.restore();
+  // 主题合成到显示 canvas
+  const c=document.getElementById('pm-canvas');c.width=c.height=S;
+  const x=c.getContext('2d'),th=PM_THEMES[pmTheme];
+  if(!th){x.drawImage(m,0,0)}
+  else{
+    const g=x.createLinearGradient(0,0,S,S);
+    th.bg.forEach((col,i)=>g.addColorStop(i/(th.bg.length-1),col));
+    x.fillStyle=g;x.fillRect(0,0,S,S);
+    const qs=Math.round(S*th.qrScale),qx=Math.round((S-qs)/2),pad=Math.round(qs*.07);
+    x.fillStyle='#fff';x.beginPath();
+    if(x.roundRect)x.roundRect(qx-pad,qx-pad,qs+pad*2,qs+pad*2,48);else x.rect(qx-pad,qx-pad,qs+pad*2,qs+pad*2);
+    x.fill();
+    x.drawImage(m,qx,qx,qs,qs);
+    x.fillStyle='rgba(255,255,255,.95)';x.font='600 46px system-ui,-apple-system,sans-serif';x.textAlign='center';x.textBaseline='alphabetic';
+    x.fillText('合并收款码 · '+th.title,S/2,qx-pad-36);
+  }
   pmMerged=c;
   document.getElementById('pm-preview-area').classList.add('on');
 }
@@ -779,78 +748,9 @@ function pmDownload(){
   if(!pmMerged)return;
   pmMerged.toBlob(b=>{const a=document.createElement('a');a.download='合并收款码.png';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()},'image/png');
 }
-pmBind('pm-wx-dz','pm-wx-fi','pm-wx-tip','pm-wx-msg',PM_WX_OK,'微信',v=>pmWxData=v);
-pmBind('pm-ali-dz','pm-ali-fi','pm-ali-tip','pm-ali-msg',PM_ALI_OK,'支付宝',v=>pmAliData=v);
+pmBind('pm-wx-dz','pm-wx-fi','pm-wx-tip','pm-wx-msg','pm-wx-link',PM_WX_OK,'微信',v=>pmWxData=v);
+pmBind('pm-ali-dz','pm-ali-fi','pm-ali-tip','pm-ali-msg','pm-ali-link',PM_ALI_OK,'支付宝',v=>pmAliData=v);
 document.getElementById('pm-ratio').oninput=function(){document.getElementById('pm-ratio-val').textContent=this.value+'%';pmTryMerge()};
-
-// ═══════════════════════════════════════
-// IMGQR — 图片二维码
-// ═══════════════════════════════════════
-(function(){
-  const dz=document.getElementById('iq-dz'),fi=document.getElementById('iq-fi'),tip=document.getElementById('iq-tip'),msg=document.getElementById('iq-msg');
-  dz.onclick=()=>fi.click();
-  dz.ondragover=e=>{e.preventDefault();dz.classList.add('ov')};
-  dz.ondragleave=()=>dz.classList.remove('ov');
-  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])iqUpload(e.dataTransfer.files[0])};
-  fi.onchange=e=>{if(e.target.files[0])iqUpload(e.target.files[0]);fi.value=''};
-  async function iqUpload(f){
-    msg.textContent='';msg.className='val-msg';window._imgqrUrl='';
-    if(!f.type.startsWith('image/')){msg.textContent='请上传图片文件';msg.classList.add('err');return}
-    if(f.size>5*1024*1024){msg.textContent='图片不能超过 5MB';msg.classList.add('err');return}
-    tip.textContent='上传中…';dz.style.pointerEvents='none';
-    try{
-      const fd=new FormData();fd.append('file',f);
-      const r=await fetch('/api/upload',{method:'POST',body:fd});
-      const j=await r.json();
-      if(!r.ok)throw new Error(j.error||'上传失败');
-      window._imgqrUrl='https://qqr.633668.xyz/img/'+j.id;
-      tip.innerHTML='✓ 已上传，点击可更换';
-      liveGenerate();
-    }catch(e){msg.textContent=e.message||'上传失败，请重试';msg.classList.add('err');tip.textContent='点击或拖放上传图片（≤5MB）'}
-    dz.style.pointerEvents='';
-  }
-})();
-
-// ═══════════════════════════════════════
-// CHROMACODE
-// ═══════════════════════════════════════
-const CC_VERSIONS=[7,10,13,15,18];let CCS={versions:[],selectedIdx:2,colors:[],label:'',thumb:''};let ccUploadedFile=null;
-document.getElementById('cc-tabs').onclick=e=>{const t=e.target.closest('.src-tab');if(!t)return;document.querySelectorAll('#cc-tabs .src-tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.src-tb').forEach(x=>x.classList.remove('on'));document.getElementById('cc-t-'+t.dataset.t).classList.add('on')};
-const ccDz=document.getElementById('cc-dz'),ccFi=document.getElementById('cc-fi');
-ccDz.onclick=()=>ccFi.click();ccDz.ondragover=e=>{e.preventDefault();ccDz.classList.add('ov')};ccDz.ondragleave=()=>ccDz.classList.remove('ov');ccDz.ondrop=e=>{e.preventDefault();ccDz.classList.remove('ov');ccPickFile(e.dataTransfer.files[0])};ccFi.onchange=e=>ccPickFile(e.target.files[0]);
-function ccPickFile(f){if(!f||!f.type.startsWith('image/'))return;ccUploadedFile=f;const r=new FileReader();r.onload=e=>document.getElementById('cc-dp').innerHTML=`<img class="preview" src="${e.target.result}"><span class="fname">${f.name}</span>`;r.readAsDataURL(f)}
-function ccStatus(m,err){const e=document.getElementById('cc-status');e.textContent=m;e.className='status'+(err?' err':'')}
-function ccActiveTab(){return document.querySelector('#cc-tabs .src-tab.on').dataset.t}
-function ccFetchImg(src){return new Promise(res=>{fetch(src,{signal:AbortSignal.timeout(3000)}).then(r=>r.ok?r.blob():null).then(b=>{if(!b||b.size<50){res(null);return}const u=URL.createObjectURL(b);const i=new Image();i.onload=()=>i.naturalWidth<2?res(null):res(i);i.onerror=()=>{URL.revokeObjectURL(u);res(null)};i.src=u}).catch(()=>res(null))})}
-const MY_PROXY='';
-const CORS_PROXIES=[...(MY_PROXY?[u=>MY_PROXY+'?url='+encodeURIComponent(u)]:[]),u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),u=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u),u=>'https://corsproxy.io/?'+encodeURIComponent(u)];
-async function ccFetchWithProxies(url){let img=await ccFetchImg(url);if(img)return img;try{return await Promise.any(CORS_PROXIES.map(p=>new Promise(async(res,rej)=>{const i=await ccFetchImg(p(url));i?res(i):rej()})))}catch{return null}}
-function ccImgLoad(src){return new Promise(res=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>i.naturalWidth<2?res(null):res(i);i.onerror=()=>res(null);i.src=src;setTimeout(()=>res(null),2500)})}
-async function ccLoadImg(url){const tab=ccActiveTab();if(tab==='upl'){if(!ccUploadedFile)throw'未上传图片。';return await ccFileToImg(ccUploadedFile)}if(tab==='iu'){const u=document.getElementById('cc-iu').value.trim();if(!u)throw'请输入图片链接。';const img=await ccFetchWithProxies(u);if(img)return img;throw'图片加载失败，请尝试直接上传。'}let d;try{d=new URL(url).hostname}catch{throw'网址无效'}
-const sources=[`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${d}&size=256`,`https://www.google.com/s2/favicons?domain=${d}&sz=256`,`https://icons.duckduckgo.com/ip3/${d}.ico`,`https://logo.clearbit.com/${d}`,`https://${d}/apple-touch-icon.png`,`https://${d}/favicon.ico`];
-try{return await Promise.any(sources.map(s=>new Promise(async(res,rej)=>{const img=await ccImgLoad(s);if(img){try{const c=document.createElement('canvas');c.width=c.height=2;const cx=c.getContext('2d');cx.drawImage(img,0,0);cx.getImageData(0,0,1,1);return res(img)}catch{}}const f=await ccFetchWithProxies(s);f?res(f):rej()})))}catch{}throw`无法加载 ${d} 的网站图标，请使用「上传」或「图片链接」。`}
-function ccFileToImg(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(f)})}
-function ccExtractColors(img){const c=document.createElement('canvas');c.width=c.height=64;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,64,64);const d=ctx.getImageData(0,0,64,64).data;const bk={};for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;const k=`${Math.round(d[i]/24)*24},${Math.round(d[i+1]/24)*24},${Math.round(d[i+2]/24)*24}`;bk[k]=(bk[k]||0)+1}return Object.entries(bk).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k])=>{const[r,g,b]=k.split(',').map(Number);return{r,g,b}})}
-function ccImgToGrid(img,sz){const c=document.createElement('canvas');c.width=c.height=sz;const ctx=c.getContext('2d');const iw=img.naturalWidth,ih=img.naturalHeight,sc=Math.max(sz/iw,sz/ih),sw=iw*sc,sh=ih*sc;ctx.drawImage(img,(sz-sw)/2,(sz-sh)/2,sw,sh);return ctx.getImageData(0,0,sz,sz)}
-function ccPx(g,c,r){const i=(r*g.width+c)*4;return{r:g.data[i],g:g.data[i+1],b:g.data[i+2],a:g.data[i+3]}}
-function ccLum(r,g,b){return(.299*r+.587*g+.114*b)/255}
-function ccIsFinder(r,c,sz){for(const[pr,pc]of[[0,0],[0,sz-7],[sz-7,0]])if(r>=pr&&r<pr+7&&c>=pc&&c<pc+7)return true;return false}
-function ccIsCritical(r,c,sz){if(ccIsFinder(r,c,sz))return true;if((r===7&&(c<8||c>=sz-8))||(r===sz-8&&c<8))return true;if((c===7&&(r<8||r>=sz-8))||(c===sz-8&&r<8))return true;return false}
-function ccHexRgb(h){const m=h.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);return m?{r:+('0x'+m[1]),g:+('0x'+m[2]),b:+('0x'+m[3])}:{r:0,g:0,b:0}}
-function ccBoostColor(r,g,b,a){const gray=.299*r+.587*g+.114*b;return{r:Math.min(255,Math.max(0,Math.round(gray+(r-gray)*(1+a)))),g:Math.min(255,Math.max(0,Math.round(gray+(g-gray)*(1+a)))),b:Math.min(255,Math.max(0,Math.round(gray+(b-gray)*(1+a))))}}
-function ccAutoTune(grid,sz){let minL=1,maxL=0,darkPx=0,lightPx=0;for(let r=0;r<sz;r++)for(let c=0;c<sz;c++){const p=ccPx(grid,c,r),L=ccLum(p.r,p.g,p.b);if(L<.25)darkPx++;if(L>.75)lightPx++;if(L<minL)minL=L;if(L>maxL)maxL=L}const t=sz*sz,ct=maxL-minL,lr=lightPx/t,dr=darkPx/t;let dm,dx,gh,gt;if(ct>.6){dm=30;dx=105;gh=80;gt=8}else if(ct>.35){dm=33;dx=100;gh=70;gt=15}else{dm=38;dx=95;gh=60;gt=22}if(lr>.5){gh=Math.min(80,gh+8);dm=Math.max(20,dm-3)}if(dr>.5){gh=Math.max(45,gh-8);gt=Math.min(30,gt+6)}ccSetS('cc-dmn',dm,'cc-vdmn');ccSetS('cc-dmx',dx,'cc-vdmx');ccSetS('cc-gs',gh,'cc-vgs');ccSetS('cc-gt',gt,'cc-vgt')}
-function ccSetS(id,v,lid){document.getElementById(id).value=v;document.getElementById(lid).textContent=v+'%'}
-function ccRenderToCanvas(canvas,qr,sz,grid,outPx){const dMin=+document.getElementById('cc-dmn').value/100,dMax=+document.getElementById('cc-dmx').value/100,gStr=+document.getElementById('cc-gs').value/100,gThr=+document.getElementById('cc-gt').value/100,shape=document.getElementById('cc-shp').value,bgC=document.getElementById('cc-bgc').value,fd=ccHexRgb(document.getElementById('cc-fdc').value),useCol=document.getElementById('cc-col').checked;const ctx=canvas.getContext('2d');const q=2,tot=sz+q*2,cell=outPx/tot,mR=cell/2;ctx.fillStyle=bgC;ctx.fillRect(0,0,outPx,outPx);for(let row=0;row<sz;row++)for(let col=0;col<sz;col++){const isDk=qr.isDark(row,col),cx=(col+q+.5)*cell,cy=(row+q+.5)*cell,crit=ccIsCritical(row,col,sz),p=ccPx(grid,col,row),L=ccLum(p.r,p.g,p.b),dk=1-L;if(isDk){let r,color;if(crit){r=mR*.92;const dom=CCS.colors[0]||fd;const fc=useCol?{r:Math.round(dom.r*.8),g:Math.round(dom.g*.8),b:Math.round(dom.b*.8)}:fd;color=`rgb(${fc.r},${fc.g},${fc.b})`}else{r=mR*Math.max(dMin,Math.min(1.05,dMin+(dMax-dMin)*dk));if(useCol&&p.a>100){const bc=ccBoostColor(p.r,p.g,p.b,.3);if(L>.78){const m=(L-.78)/.22;color=`rgb(${Math.round(bc.r*(1-m*.75)+fd.r*m*.75)},${Math.round(bc.g*(1-m*.75)+fd.g*m*.75)},${Math.round(bc.b*(1-m*.75)+fd.b*m*.75)})`}else color=`rgb(${bc.r},${bc.g},${bc.b})`}else color=`rgb(${fd.r},${fd.g},${fd.b})`}ccDot(ctx,cx,cy,r,shape,color)}else if(!crit&&gStr>0&&dk>gThr){const nd=(dk-gThr)/(1-gThr),gc=mR*.35,r=Math.min(mR*.04+(gc*gStr-mR*.04)*Math.pow(nd,.55),gc);const bc=useCol&&p.a>100?ccBoostColor(p.r,p.g,p.b,.3):{r:fd.r,g:fd.g,b:fd.b};ccDot(ctx,cx,cy,r,shape,`rgb(${bc.r},${bc.g},${bc.b})`)}}}
-function ccDot(ctx,cx,cy,r,shape,color){ctx.fillStyle=color;if(shape==='circle'){ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill()}else if(shape==='rrect'){const rr=r*.35;ctx.beginPath();ctx.moveTo(cx-r+rr,cy-r);ctx.lineTo(cx+r-rr,cy-r);ctx.quadraticCurveTo(cx+r,cy-r,cx+r,cy-r+rr);ctx.lineTo(cx+r,cy+r-rr);ctx.quadraticCurveTo(cx+r,cy+r,cx+r-rr,cy+r);ctx.lineTo(cx-r+rr,cy+r);ctx.quadraticCurveTo(cx-r,cy+r,cx-r,cy+r-rr);ctx.lineTo(cx-r,cy-r+rr);ctx.quadraticCurveTo(cx-r,cy-r,cx-r+rr,cy-r);ctx.closePath();ctx.fill()}else ctx.fillRect(cx-r,cy-r,r*2,r*2)}
-async function generateChroma(){let url=document.getElementById('cc-url').value.trim();if(!url){ccStatus('请输入网址',true);return}if(!/^https?:\/\//i.test(url)&&url.includes('.')){url='https://'+url;document.getElementById('cc-url').value=url}const btn=document.getElementById('cc-gen-btn');btn.disabled=true;btn.innerHTML='<span class="spin"></span> 生成中…';ccStatus('图片加载中…');try{const src=await ccLoadImg(url);const colors=ccExtractColors(src);CCS.colors=colors;CCS.label=(()=>{try{return new URL(url).hostname}catch{return'qr'}})();CCS.thumb=src.src||'';document.getElementById('cc-sth').src=CCS.thumb;document.getElementById('cc-sn').textContent=CCS.label;const pal=document.getElementById('cc-pal');pal.innerHTML='';colors.forEach(c=>{const d=document.createElement('div');d.className='sw';d.style.background=`rgb(${c.r},${c.g},${c.b})`;pal.appendChild(d)});document.getElementById('cc-srcinfo').style.display='flex';const ecc=document.getElementById('cc-ecc').value;CCS.versions=[];const car=document.getElementById('cc-carousel');car.innerHTML='';ccStatus('正在构建二维码版本…');let tuned=false;for(let i=0;i<CC_VERSIONS.length;i++){const ver=CC_VERSIONS[i];let qr;try{qr=qrcode(ver,ecc);qr.addData(url);qr.make()}catch{try{qr=qrcode(0,ecc);qr.addData(url);qr.make()}catch{continue}}const sz=qr.getModuleCount(),grid=ccImgToGrid(src,sz);if(!tuned){ccAutoTune(grid,sz);tuned=true}const tc=document.createElement('canvas');tc.width=tc.height=128;ccRenderToCanvas(tc,qr,sz,grid,128);CCS.versions.push({qr,sz,grid,ver});const card=document.createElement('div');card.className='vcard'+(i===CCS.selectedIdx?' sel':'');card.innerHTML=`<div class="vthumb"></div><div class="vlabel">v${ver} · ${sz}×${sz}</div>`;card.querySelector('.vthumb').appendChild(tc);card.onclick=()=>ccSelectVersion(i);car.appendChild(card)}CCS.selectedIdx=Math.min(CCS.selectedIdx,CCS.versions.length-1);ccRenderSelected();document.getElementById('cc-preview-area').classList.add('on');ccStatus('')}catch(e){ccStatus('出错：'+e,true)}finally{btn.disabled=false;btn.textContent='生成 ChromaCode'}}
-function ccSelectVersion(i){CCS.selectedIdx=i;document.querySelectorAll('#cc-carousel .vcard').forEach((c,j)=>c.classList.toggle('sel',j===i));ccRenderSelected()}
-function ccRenderSelected(){const v=CCS.versions[CCS.selectedIdx];if(!v)return;const o=+document.getElementById('cc-osz').value,c=document.getElementById('cc-main');c.width=c.height=o;ccRenderToCanvas(c,v.qr,v.sz,v.grid,o)}
-['cc-dmn','cc-dmx','cc-gs','cc-gt'].forEach(id=>{const vm={'cc-dmn':'cc-vdmn','cc-dmx':'cc-vdmx','cc-gs':'cc-vgs','cc-gt':'cc-vgt'};document.getElementById(id).oninput=()=>{document.getElementById(vm[id]).textContent=document.getElementById(id).value+'%';ccRenderSelected()}});
-['cc-shp','cc-osz','cc-bgc','cc-fdc','cc-col'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('change',ccRenderSelected);el.addEventListener('input',ccRenderSelected)});
-document.getElementById('cc-ecc').onchange=()=>{if(CCS.versions.length)generateChroma()};
-document.getElementById('cc-url').onkeydown=e=>{if(e.key==='Enter')generateChroma()};
-async function ccDlPNG(){const c=document.getElementById('cc-main'),v=CCS.versions[CCS.selectedIdx],n=`chromacode-${CCS.label}-v${v?.ver||'x'}.png`;try{const b=await new Promise(r=>c.toBlob(r,'image/png'));const f=new File([b],n,{type:'image/png'});if(navigator.canShare?.({files:[f]})){await navigator.share({files:[f]});return}}catch{}const a=document.createElement('a');a.download=n;a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}
-async function ccDlSVG(){const v=CCS.versions[CCS.selectedIdx];if(!v)return;const{qr,sz,grid}=v,dMin=+document.getElementById('cc-dmn').value/100,dMax=+document.getElementById('cc-dmx').value/100,gStr=+document.getElementById('cc-gs').value/100,gThr=+document.getElementById('cc-gt').value/100,shape=document.getElementById('cc-shp').value,bgC=document.getElementById('cc-bgc').value,fd=ccHexRgb(document.getElementById('cc-fdc').value),useCol=document.getElementById('cc-col').checked,q=2,tot=sz+q*2,cell=12,svgSz=tot*cell,mR=cell/2;const pts=[`<svg xmlns="http://www.w3.org/2000/svg" width="${svgSz}" height="${svgSz}" viewBox="0 0 ${svgSz} ${svgSz}">`,`<rect width="${svgSz}" height="${svgSz}" fill="${bgC}"/>`];for(let row=0;row<sz;row++)for(let col=0;col<sz;col++){const isDk=qr.isDark(row,col),cx=(col+q+.5)*cell,cy=(row+q+.5)*cell,crit=ccIsCritical(row,col,sz),p=ccPx(grid,col,row),L=ccLum(p.r,p.g,p.b),dk=1-L;if(isDk){let r,color;if(crit){r=mR*.92;const dom=CCS.colors[0]||fd,fc=useCol?{r:Math.round(dom.r*.8),g:Math.round(dom.g*.8),b:Math.round(dom.b*.8)}:fd;color=`rgb(${fc.r},${fc.g},${fc.b})`}else{r=mR*Math.max(dMin,Math.min(1.05,dMin+(dMax-dMin)*dk));if(useCol&&p.a>100){const bc=ccBoostColor(p.r,p.g,p.b,.3);if(L>.78){const m=(L-.78)/.22;color=`rgb(${Math.round(bc.r*(1-m*.75)+fd.r*m*.75)},${Math.round(bc.g*(1-m*.75)+fd.g*m*.75)},${Math.round(bc.b*(1-m*.75)+fd.b*m*.75)})`}else color=`rgb(${bc.r},${bc.g},${bc.b})`}else color=`rgb(${fd.r},${fd.g},${fd.b})`}if(shape==='circle')pts.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}"/>`);else if(shape==='rrect')pts.push(`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" rx="${r*.35}" fill="${color}"/>`);else pts.push(`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" fill="${color}"/>`)}else if(!crit&&gStr>0&&dk>gThr){const nd=(dk-gThr)/(1-gThr),gc=mR*.35,r=Math.min(mR*.04+(gc*gStr-mR*.04)*Math.pow(nd,.55),gc),bc=useCol&&p.a>100?ccBoostColor(p.r,p.g,p.b,.3):{r:fd.r,g:fd.g,b:fd.b};if(shape==='circle')pts.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="rgb(${bc.r},${bc.g},${bc.b})"/>`);else pts.push(`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" rx="${r*.2}" fill="rgb(${bc.r},${bc.g},${bc.b})"/>`)}}pts.push('</svg>');const blob=new Blob([pts.join('\n')],{type:'image/svg+xml'}),n=`chromacode-${CCS.label}-v${v.ver}.svg`;try{const f=new File([blob],n,{type:'image/svg+xml'});if(navigator.canShare?.({files:[f]})){await navigator.share({files:[f]});return}}catch{}const a=document.createElement('a');a.download=n;a.href=URL.createObjectURL(blob);document.body.appendChild(a);a.click();a.remove()}
 
 // ═══════════════════════════════════════
 // QR SCANNER
