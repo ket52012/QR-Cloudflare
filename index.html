@@ -249,7 +249,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
     </div>
     <div class="link-box" id="std-link-box"><div class="link-label">编码数据</div><div class="link-val" id="std-link-val"></div><button class="copy-btn" onclick="copyLink()">复制</button></div>
     <div class="card">
-      <div class="dp" id="dp-imgqr"><div class="field"><label>图片链接</label><input class="inp" id="iq-url" placeholder="https://example.com/image.jpg" spellcheck="false"><div class="val-msg" id="iq-msg"></div><div class="hint">填入图片的直链地址，生成二维码后手机扫码即可打开查看。<br>本工具为纯在线处理，不存储任何图片与数据 — 有图床请用自己的图床，没有可自行搜索免费图床。</div></div></div>
+      <div class="dp" id="dp-imgqr"><div class="field"><label>图片链接</label><input class="inp" id="iq-url" placeholder="请粘贴图片直链" spellcheck="false"><div class="val-msg" id="iq-msg"></div><div class="field"><label class="chk"><input type="checkbox" id="iq-direct"> 直接使用原图链接（跳过展示页）</label></div><div class="hint">填入图片的直链地址，生成二维码后手机扫码即在展示页中查看图片。<br>本工具为纯在线处理，不存储任何图片与数据 — 展示页仅实时加载你填写的链接。有图床请用自己的图床，没有可自行搜索免费图床。</div></div></div>
       <div class="card-title">样式与颜色</div>
       <div class="row r3">
         <div class="field"><label>二维码颜色</label><input type="color" class="inp" id="std-fg" value="#000000"></div>
@@ -425,7 +425,7 @@ function validateAll(){
     case 'location':{const n=document.getElementById('loc-name').value.trim(),la=document.getElementById('loc-lat').value.trim(),ln=document.getElementById('loc-lng').value.trim();if(!n&&!la&&!ln)valid=false;if((la&&!ln)||(!la&&ln)){valid=false;vMsg('v-loc','需要同时填写纬度和经度','warn')}break}
     case 'calendar':{if(!document.getElementById('cal-title').value.trim()){valid=false;vMsg('v-cal-title','需要填写标题','err')}if(!document.getElementById('cal-sd').value){valid=false;vMsg('v-cal-sd','需要选择日期','err')}break}
     case 'vcard':{if(!document.getElementById('vc-fn').value.trim()&&!document.getElementById('vc-ln').value.trim()){valid=false;vMsg('v-vc-name','需要填写姓名','err')}const em=document.getElementById('vc-email').value.trim();if(em&&!isEmail(em)){valid=false;vMsg('v-vc-email','邮箱格式不正确','err')}break}
-    case 'imgqr':{let v=document.getElementById('iq-url').value.trim();if(!v){valid=false;break}if(!/^https?:\/\//i.test(v)&&v.includes('.')){v='https://'+v;document.getElementById('iq-url').value=v}if(!isUrl(v)){valid=false;vMsg('iq-msg','请输入有效的图片链接','err');document.getElementById('iq-url').classList.add('invalid')}else document.getElementById('iq-url').classList.add('valid');break}
+    case 'imgqr':{let v=document.getElementById('iq-url').value.trim();if(!v){valid=false;break}if(!/^https?:\/\//i.test(v)){valid=false;vMsg('iq-msg','链接必须以 http(s):// 开头','err');document.getElementById('iq-url').classList.add('invalid')}else if(!isUrl(v)){valid=false;vMsg('iq-msg','请输入有效的图片链接','err');document.getElementById('iq-url').classList.add('invalid')}else document.getElementById('iq-url').classList.add('valid');break}
     case 'duitnow':{
       if(!document.getElementById('dn-gen-acquirer').value){valid=false;vMsg('v-dn-acquirer','请选择收单机构','err')}
       if(!document.getElementById('dn-gen-qrid').value.trim()){valid=false;vMsg('v-dn-qrid','需要填写二维码 ID','err')}
@@ -453,7 +453,7 @@ function getStdData(){
     case 'calendar':{const t=document.getElementById('cal-title').value.trim();if(!t)return'';const allDay=document.getElementById('cal-allday').checked,sd=document.getElementById('cal-sd').value,st=document.getElementById('cal-st').value,ed=document.getElementById('cal-ed').value,et=document.getElementById('cal-et').value;const fmt=(d,ti)=>(d||'').replace(/-/g,'')+(allDay?'':'T'+(ti||'0000').replace(/:/g,'')+'00');let ics=`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${t}`;const desc=document.getElementById('cal-desc').value,loc=document.getElementById('cal-loc').value;if(desc)ics+=`\nDESCRIPTION:${desc}`;if(loc)ics+=`\nLOCATION:${loc}`;if(sd)ics+=`\nDTSTART:${fmt(sd,st)}`;if(ed)ics+=`\nDTEND:${fmt(ed,et)}`;else if(sd)ics+=`\nDTEND:${fmt(sd,et||st)}`;return ics+'\nEND:VEVENT\nEND:VCALENDAR'}
     case 'vcard':{const fn=document.getElementById('vc-fn').value.trim(),ln=document.getElementById('vc-ln').value.trim();if(!fn&&!ln)return'';let v=`BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn}\nFN:${fn} ${ln}`;const ph=document.getElementById('vc-phone').value.trim().replace(/[\s\-\(\)]/g,''),em=document.getElementById('vc-email').value.trim(),org=document.getElementById('vc-org').value.trim();let url=document.getElementById('vc-url').value.trim();if(ph)v+=`\nTEL:${document.getElementById('vc-cc').value}${ph}`;if(em)v+=`\nEMAIL:${em}`;if(org)v+=`\nORG:${org}`;if(url){if(!/^https?:\/\//i.test(url)&&url.includes('.'))url='https://'+url;v+=`\nURL:${url}`}return v+'\nEND:VCARD'}
     case 'duitnow':{return buildDuitNowEMV()}
-    case 'imgqr':{const u=document.getElementById('iq-url').value.trim();return u}
+    case 'imgqr':{const u=document.getElementById('iq-url').value.trim();if(document.getElementById('iq-direct').checked)return u;return 'https://qqr.633668.xyz/v?u='+encodeURIComponent(u)}
   }
   return'';
 }
@@ -588,7 +588,7 @@ function generateStandard(){
 // ═══════ LIVE LISTENERS ═══════
 ['in-url','in-text','iq-url','wifi-ssid','wifi-pass','em-to','em-sub','em-body','in-phone','sms-phone','sms-msg','wa-phone','wa-msg','loc-name','loc-lat','loc-lng','cal-title','cal-desc','cal-loc','cal-sd','cal-st','cal-ed','cal-et','vc-fn','vc-ln','vc-phone','vc-email','vc-org','vc-url','dn-gen-qrid','dn-gen-name','dn-gen-city','dn-gen-postal','dn-gen-amount','dn-gen-bill','dn-gen-store','dn-gen-ref','dn-gen-terminal'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',liveGenerate);el.addEventListener('change',liveGenerate)}});
 ['wifi-enc','ph-cc','sms-cc','wa-cc','vc-cc','std-ecc','std-res','std-tmpl','dn-gen-acquirer','dn-gen-mcc'].forEach(id=>document.getElementById(id).addEventListener('change',liveGenerate));
-['wifi-hidden','cal-allday','std-outline','std-invert','wifi-show-ssid','wifi-show-pass','wifi-show-enc'].forEach(id=>document.getElementById(id).addEventListener('change',liveGenerate));
+['wifi-hidden','cal-allday','std-outline','std-invert','wifi-show-ssid','wifi-show-pass','wifi-show-enc','iq-direct'].forEach(id=>document.getElementById(id).addEventListener('change',liveGenerate));
 document.getElementById('std-stroke').oninput=function(){document.getElementById('stroke-val').textContent=this.value+'%';liveGenerate()};
 
 // ═══════ DUITNOW GENERATOR RENDER ═══════
