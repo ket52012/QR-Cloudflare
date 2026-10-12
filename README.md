@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/QR-Studio-06b6d4?style=for-the-badge&logo=qrcode&logoColor=white" alt="QR Studio" />
+  <img src="https://img.shields.io/badge/在线二维码处理工具-0a84ff?style=for-the-badge&logo=qrcode&logoColor=white" alt="在线二维码处理工具" />
   <br/>
-  <strong>免费、开源、好用的二维码生成器。</strong>
+  <strong>免费、开源、好用的二维码处理工具。</strong>
   <br/>
   <sub>无需注册。无水印。无追踪。没有套路。</sub>
 </p>
 
-> 🌐 **汉化说明**：这是 [aixmbcom/qr-studio](https://github.com/aixmbcom/qr-studio) 的简体中文汉化版。原项目由 [deadboy18](https://github.com/deadboy18) 开发，基于 MIT 协议开源。汉化仅翻译界面文案与文档，不改动任何功能逻辑。
+> 🌐 **项目说明**：本项目基于 [aixmbcom/qr-studio](https://github.com/aixmbcom/qr-studio)（原作者 [deadboy18](https://github.com/deadboy18)，MIT 协议）汉化并二次开发。v2 新增：合并收款码、图片二维码、iOS 毛玻璃 UI、5 种二维码样式。
 
 <p align="center">
   <a href="https://deadboy18.github.io/qr-studio">
@@ -22,20 +22,29 @@
 
 ---
 
-## QR Studio 是什么？
+## 在线二维码处理工具是什么？
 
-QR Studio 是一款专业级二维码生成器，完全在浏览器中运行。支持 **11 种数据类型**（含 🇲🇾 DuitNow）、**ChromaCode 图像融合马赛克码**、带 **DuitNow EMV 解析的完整二维码扫描器**、**实时预览**，可导出 **PNG 和 SVG**——全部装在一个 HTML 文件里，零后端。
+一款专业级二维码处理工具，完全在浏览器中运行。支持 **12 种数据类型**（含 🇲🇾 DuitNow、🖼️ 图片码）、**微信+支付宝合并收款码**、**ChromaCode 图像融合马赛克码**、带 **DuitNow EMV 解析的完整二维码扫描器**、**5 种二维码样式**、**实时预览**，可导出 **PNG 和 SVG**。
 
-市面上大多数二维码生成器都是臃肿的 SaaS：基础功能收费、二维码上打水印、下载个 PNG 还要注册账号。QR Studio 一样都不做。
+市面上大多数二维码生成器都是臃肿的 SaaS：基础功能收费、二维码上打水印、下载个 PNG 还要注册账号。这里一样都不做。
 
 ---
 
 ## 功能
 
 ### 标准模式
-- **11 种数据类型** — 网址、文本、WiFi、邮件、电话、短信、WhatsApp、位置、日历事件、vCard、🇲🇾 DuitNow
+- **12 种数据类型** — 网址、文本、WiFi、邮件、电话、短信、WhatsApp、位置、日历事件、电子名片、🇲🇾 DuitNow、🖼️ 图片码
 - **实时预览** — 输入即生成，无需点"生成"按钮
+- **5 种二维码样式** — ⬛ 经典方块、🔳 圆角、⚫ 墨点、💧 水滴、🌈 霓虹渐变（均经真机解码验证可扫）
 - **完整自定义** — 前景/背景颜色、7 套预设、对比度警告
+
+### 合并收款码
+- **微信 + 支付宝二合一** — 上传两张收款码，物理合并为一张：微信扫走微信、支付宝扫走支付宝
+- **纯本地处理** — 解码校验与合并全在浏览器完成，图片不上传
+- 参考 [PayQrcode](https://github.com/uxiaohan/PayQrcode) 的物理合并方案
+
+### 图片码
+- **上传图片生成二维码** — 手机扫码即查看图片，云端存储长期有效
 - **中心 Logo** — 上传任意图片作为中心 Logo，自动留白
 - **描边与外框** — 可调的静区和边框选项
 - **节日模板** — 圣诞节、万圣节、新年、复活节、情人节、圣帕特里克节、生日边框
@@ -119,7 +128,7 @@ qr-studio/
 2. 进入 **Settings → Pages**
 3. **Source** 选择 `main` 分支和 `/ (root)` 目录
 4. 点击 **Save**
-5. 你的 QR Studio 就上线了：`https://<你的用户名>.github.io/qr-studio`
+5. 你的在线二维码处理工具就上线了：`https://<你的用户名>.github.io/QR-Cloudflare`
 
 ---
 
@@ -129,6 +138,7 @@ qr-studio/
 |-------|-----------|
 | **页面与逻辑** | 原生 HTML、CSS、JavaScript |
 | **二维码引擎** | [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (1.4.4) |
+| **图片存储** | Cloudflare R2（图片码功能） |
 | **二维码扫描** | [jsQR](https://github.com/cozmo/jsQR) (1.4.0，懒加载) |
 | **ChromaCode 算法** | [Toms Nimanis / IT Linden](https://github.com/TomsNimanis/chromacode) |
 | **DuitNow EMV 规范** | [PayNet QR 规范 v1.5](https://docs.developer.paynet.my/docs/duitNow-QR/integration/QR-generation-specification/merchant-presented-mode/qr-data-object) |
