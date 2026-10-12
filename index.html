@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>QR Studio — 二维码生成与品牌定制</title>
+<title>在线二维码处理工具</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -13,123 +13,169 @@
 <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" as="script">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root,[data-theme="dark"]{--bg:#09090b;--surface:#18181b;--surface2:#27272a;--border:#3f3f46;--text:#fafafa;--text2:#a1a1aa;--text3:#71717a;--accent:#06b6d4;--accent2:#22d3ee;--accent-glow:rgba(6,182,212,.12);--qr-card-bg:#fff;--err:#ef4444;--ok:#22c55e;--warn:#f59e0b;--radius:10px;--radius-lg:16px}
-[data-theme="light"]{--bg:#f4f4f5;--surface:#fff;--surface2:#e4e4e7;--border:#d4d4d8;--text:#18181b;--text2:#52525b;--text3:#71717a;--accent:#0891b2;--accent2:#06b6d4;--accent-glow:rgba(8,145,178,.1);--qr-card-bg:#fff;--err:#dc2626;--ok:#16a34a;--warn:#d97706}
-html{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;transition:background .3s,color .3s}
-body{min-height:100dvh;display:flex;flex-direction:column}
+*{margin:0;padding:0;box-sizing:border-box}
+/* ══════ iOS 毛玻璃主题 ══════ */
+:root,[data-theme="dark"]{
+  --bg:#0b0b10;
+  --surface:rgba(30,30,38,.55);--surface2:rgba(255,255,255,.08);
+  --border:rgba(255,255,255,.12);
+  --text:#f5f5f7;--text2:rgba(235,235,245,.72);--text3:rgba(235,235,245,.45);
+  --accent:#0a84ff;--accent2:#40a0ff;--accent-ink:#fff;
+  --accent-glow:rgba(10,132,255,.28);
+  --qr-card-bg:#fff;
+  --err:#ff6b6b;--ok:#30d158;--warn:#ffd60a;
+  --radius:14px;--radius-lg:22px;
+  --shadow:0 16px 48px rgba(0,0,0,.38);
+  --orb1:rgba(10,132,255,.20);--orb2:rgba(94,92,230,.20);--orb3:rgba(255,69,58,.08);
+}
+[data-theme="light"]{
+  --bg:#e9ebf1;
+  --surface:rgba(255,255,255,.62);--surface2:rgba(255,255,255,.45);
+  --border:rgba(0,0,0,.07);
+  --text:#1c1c1e;--text2:rgba(28,28,30,.68);--text3:rgba(28,28,30,.42);
+  --accent:#007aff;--accent2:#0a84ff;--accent-ink:#fff;
+  --accent-glow:rgba(0,122,255,.22);
+  --qr-card-bg:#fff;
+  --err:#ff3b30;--ok:#34c759;--warn:#ff9500;
+  --shadow:0 16px 48px rgba(30,40,80,.14);
+  --orb1:rgba(0,122,255,.14);--orb2:rgba(94,92,230,.12);--orb3:rgba(255,149,0,.10);
+}
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC','Hiragino Sans GB','Microsoft YaHei','DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;transition:background .35s,color .35s}
+body{min-height:100dvh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
+/* 多层氛围光斑 */
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(640px 440px at 12% 4%,var(--orb1),transparent 62%),
+  radial-gradient(560px 560px at 88% 82%,var(--orb2),transparent 62%),
+  radial-gradient(420px 320px at 72% 12%,var(--orb3),transparent 60%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(160deg,transparent 0%,rgba(128,128,160,.05) 45%,transparent 100%)}
 input,select,textarea,button{font-family:inherit;font-size:inherit}
 ::selection{background:var(--accent);color:#fff}
-.shell{max-width:860px;margin:0 auto;padding:24px 20px 60px;width:100%}
-.hdr{text-align:center;padding:40px 0 28px;position:relative}
-.hdr h1{font-family:'JetBrains Mono',monospace;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:600;letter-spacing:-.04em;margin-bottom:6px}
-.hdr h1 span{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.shell{max-width:880px;margin:0 auto;padding:24px 20px 64px;width:100%}
+.hdr{text-align:center;padding:44px 0 30px;position:relative}
+.hdr h1{font-size:clamp(1.7rem,4.4vw,2.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:8px;background:linear-gradient(120deg,var(--text) 30%,var(--accent2) 70%,var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hdr p{color:var(--text2);font-size:.88rem}
-.theme-toggle{position:absolute;top:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px;display:flex;gap:2px}
-.theme-toggle button{width:32px;height:32px;border:none;border-radius:50%;background:transparent;cursor:pointer;font-size:1rem;color:var(--text3);transition:all .2s;display:flex;align-items:center;justify-content:center}
-.theme-toggle button.on{background:var(--accent);color:#fff}
-.mode-bar{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:28px}
-.mode-btn{flex:1;padding:11px 16px;text-align:center;font-weight:500;font-size:.85rem;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all .2s}
-.mode-btn.on{color:#fff;background:var(--accent)}
+.theme-toggle{position:absolute;top:0;right:0;background:var(--surface);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--border);border-radius:24px;padding:4px;display:flex;gap:2px;box-shadow:var(--shadow)}
+.theme-toggle button{width:34px;height:34px;border:none;border-radius:50%;background:transparent;cursor:pointer;font-size:1rem;color:var(--text3);transition:all .25s;display:flex;align-items:center;justify-content:center}
+.theme-toggle button:hover{color:var(--text2)}
+.theme-toggle button.on{background:var(--accent);color:#fff;box-shadow:0 4px 14px var(--accent-glow)}
+/* iOS 分段控件 */
+.mode-bar{display:flex;background:var(--surface);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:28px;padding:4px;gap:4px;box-shadow:var(--shadow)}
+.mode-btn{flex:1;padding:10px 8px;text-align:center;font-weight:600;font-size:.84rem;cursor:pointer;border:none;border-radius:13px;background:transparent;color:var(--text2);transition:all .25s cubic-bezier(.32,.72,.35,1)}
+.mode-btn .sub{font-size:.7rem;color:inherit;opacity:.6;display:block;margin-top:2px;font-weight:400}
+.mode-btn.on{color:var(--accent-ink);background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 6px 18px var(--accent-glow)}
+.mode-btn.on .sub{opacity:.85}
 .mode-btn:not(.on):hover{color:var(--text);background:var(--surface2)}
-.mode-btn .sub{font-size:.72rem;color:inherit;opacity:.65;display:block;margin-top:2px;font-weight:400}
-.sec{display:none;content-visibility:hidden}.sec.on{display:block;content-visibility:visible}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;transition:background .3s,border-color .3s}
-.card-title{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:14px}
+.mode-btn:not(.on):active{transform:scale(.97)}
+.sec{display:none;content-visibility:hidden}.sec.on{display:block;content-visibility:visible;animation:secIn .35s cubic-bezier(.32,.72,.35,1)}
+@keyframes secIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* 毛玻璃卡片 */
+.card{background:var(--surface);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:16px;box-shadow:var(--shadow);transition:background .35s,border-color .35s,box-shadow .3s}
+.card-title{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:14px}
 .field{margin-bottom:14px}.field:last-child{margin-bottom:0}
-.field label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:5px;font-weight:500}
-.inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s}
-.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.field label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:6px;font-weight:500}
+.inp{width:100%;background:var(--surface2);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.inp:hover{border-color:var(--text3)}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow);background:var(--surface)}
 .inp::placeholder{color:var(--text3)}
-.inp.invalid{border-color:var(--err)!important;box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
+.inp.invalid{border-color:var(--err)!important;box-shadow:0 0 0 4px rgba(255,69,58,.16)!important}
 .inp.valid{border-color:var(--ok)!important}
 textarea.inp{resize:vertical;min-height:70px}
-select.inp{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2371717a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-input[type=color].inp{height:40px;padding:4px 6px;cursor:pointer}
-.val-msg{font-size:.72rem;margin-top:4px;min-height:1em}.val-msg.err{color:var(--err)}.val-msg.ok{color:var(--ok)}.val-msg.warn{color:var(--warn)}
+select.inp{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238e8e93' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+input[type=color].inp{height:42px;padding:5px 8px;cursor:pointer}
+.val-msg{font-size:.72rem;margin-top:5px;min-height:1em}.val-msg.err{color:var(--err)}.val-msg.ok{color:var(--ok)}.val-msg.warn{color:var(--warn)}
 .row{display:grid;gap:12px}.r2{grid-template-columns:1fr 1fr}.r3{grid-template-columns:1fr 1fr 1fr}
 .phone-row{display:flex;gap:8px}.phone-row select{width:120px;flex-shrink:0}.phone-row input{flex:1}
-.type-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.pill{padding:7px 14px;border-radius:20px;font-size:.78rem;font-weight:500;background:var(--bg);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
-.pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.pill:not(.on):hover{border-color:var(--text3);color:var(--text)}
-.dp{display:none}.dp.on{display:block}
+/* 类型胶囊 */
+.type-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.pill{padding:8px 16px;border-radius:999px;font-size:.78rem;font-weight:500;background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .22s;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.pill.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 6px 16px var(--accent-glow);font-weight:600}
+.pill:not(.on):hover{border-color:var(--text3);color:var(--text);transform:translateY(-1px)}
+.pill:not(.on):active{transform:scale(.96)}
+.dp{display:none}.dp.on{display:block;animation:secIn .3s ease}
 .tip{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:help}
 .tip .tip-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--surface2);color:var(--text3);font-size:.65rem;font-weight:700;border:1px solid var(--border)}
-.tip .tip-text{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 14px;border-radius:8px;font-size:.75rem;line-height:1.45;width:300px;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}
-.tip .tip-text::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--text)}
+.tip .tip-text{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(28,28,32,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;padding:10px 14px;border-radius:12px;font-size:.75rem;line-height:1.5;width:300px;z-index:100;box-shadow:0 12px 32px rgba(0,0,0,.3);pointer-events:none;border:1px solid rgba(255,255,255,.12)}
+.tip .tip-text::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(28,28,32,.92)}
 .tip:hover .tip-text{display:block}
 .chk{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--text2);cursor:pointer}
-.chk input{accent-color:var(--accent);width:16px;height:16px}
-input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border);outline:none;margin-top:4px}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+.chk input{accent-color:var(--accent);width:17px;height:17px;cursor:pointer}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;background:var(--border);outline:none;margin-top:6px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:grab;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:grab}
 .range-row{display:flex;align-items:center;gap:10px}.range-row input[type=range]{flex:1}
 .rv{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);min-width:34px;text-align:right}
-.presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.preset{width:32px;height:32px;border-radius:6px;border:2px solid var(--border);cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s}
-.preset:hover,.preset.on{border-color:var(--accent)}
-.preset .fg{position:absolute;bottom:2px;left:2px;width:10px;height:10px;border-radius:2px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.preset{width:34px;height:34px;border-radius:10px;border:2px solid var(--border);cursor:pointer;position:relative;overflow:hidden;transition:all .2s}
+.preset:hover{transform:scale(1.08)}
+.preset.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.preset .fg{position:absolute;bottom:2px;left:2px;width:10px;height:10px;border-radius:3px}
 .contrast-warn{display:none;font-size:.75rem;color:var(--warn);margin-top:8px;align-items:center;gap:4px}.contrast-warn.show{display:flex}
-.link-box{display:none;margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:.76rem;word-break:break-all;color:var(--text2);position:relative;line-height:1.5}
-.link-box.on{display:block}
-.link-box .link-label{font-family:'DM Sans',sans-serif;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:600}
+.link-box{display:none;margin-top:12px;background:var(--surface2);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:.76rem;word-break:break-all;color:var(--text2);position:relative;line-height:1.5}
+.link-box.on{display:block;animation:secIn .3s ease}
+.link-box .link-label{font-family:inherit;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:600}
 .link-box .link-val{color:var(--accent);user-select:all}
-.link-box .copy-btn{position:absolute;top:8px;right:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.7rem;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s}
+.link-box .copy-btn{position:absolute;top:8px;right:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:5px 12px;font-size:.7rem;color:var(--text2);cursor:pointer;font-weight:600;transition:all .2s}
 .link-box .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
-.preview-area{display:none}.preview-area.on{display:block}
-.qr-tmpl-frame{max-width:400px;margin:0 auto 16px;padding:20px;border-radius:var(--radius-lg);transition:all .3s;background:var(--qr-card-bg);box-shadow:0 8px 40px rgba(0,0,0,.3)}
-.qr-tmpl-frame canvas{display:block;width:100%;height:auto;border-radius:6px}
-.qr-tmpl-frame.t-christmas{border-radius:50%;background:radial-gradient(circle,#22c55e,#16a34a 30%,#15803d 60%,#166534);box-shadow:0 0 0 6px #dc2626,0 0 0 12px #fbbf24,0 0 0 18px #22c55e}
-.qr-tmpl-frame.t-halloween{border-radius:16px;background:linear-gradient(135deg,#ea580c,#dc2626 50%,#7c2d12);box-shadow:0 8px 32px rgba(234,88,12,.4);transform:rotate(-2deg)}
-.qr-tmpl-frame.t-newyear{border-radius:8px;background:linear-gradient(45deg,#1e40af,#3b82f6 25%,#60a5fa 50%,#93c5fd 75%,#dbeafe);box-shadow:0 0 20px rgba(59,130,246,.5)}
-.qr-tmpl-frame.t-easter{border-radius:50%;background:radial-gradient(circle,#fef3c7,#fde68a 30%,#f59e0b 60%,#d97706);box-shadow:0 0 0 8px #ec4899,0 0 0 16px #8b5cf6,0 0 0 24px #06b6d4}
-.qr-tmpl-frame.t-valentine{border-radius:12px;background:linear-gradient(135deg,#ec4899,#f472b6 30%,#fb7185 60%,#f43f5e);box-shadow:0 8px 32px rgba(236,72,153,.3)}
-.qr-tmpl-frame.t-stpatricks{border-radius:8px;background:linear-gradient(45deg,#16a34a,#22c55e 25%,#4ade80 50%,#86efac 75%,#dcfce7);box-shadow:0 0 15px rgba(34,197,94,.4)}
-.qr-tmpl-frame.t-birthday{border-radius:16px;background:linear-gradient(135deg,#f59e0b,#fbbf24 25%,#fde047 50%,#fef3c7 75%,#fff);box-shadow:0 8px 32px rgba(245,158,11,.3);transform:rotate(1deg)}
-.dl-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
-.dl-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 22px;color:var(--text);font-weight:500;font-size:.82rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
-.dl-btn:hover{border-color:var(--accent);color:var(--accent)}
+.link-box .copy-btn:active{transform:scale(.95)}
+.preview-area{display:none}.preview-area.on{display:block;animation:secIn .35s ease}
+/* 二维码展示卡: 保持纯白底保证可扫 */
+.qr-tmpl-frame{max-width:400px;margin:0 auto 16px;padding:22px;border-radius:var(--radius-lg);transition:all .3s;background:var(--qr-card-bg);box-shadow:0 20px 60px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.15)}
+.qr-tmpl-frame canvas{display:block;width:100%;height:auto;border-radius:8px}
+.dl-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.dl-btn{background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:11px 24px;color:var(--text);font-weight:600;font-size:.82rem;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.dl-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.dl-btn:active{transform:scale(.96)}
 .dl-btn svg{width:16px;height:16px}
-.dz{border:2px dashed var(--border);border-radius:var(--radius);padding:24px 16px;text-align:center;cursor:pointer;color:var(--text3);font-size:.82rem;transition:all .2s}
-.dz:hover,.dz.ov{border-color:var(--accent);background:var(--accent-glow);color:var(--text2)}
+.dz{border:2px dashed var(--border);border-radius:var(--radius);padding:26px 16px;text-align:center;cursor:pointer;color:var(--text3);font-size:.82rem;transition:all .25s;background:var(--surface2);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.dz:hover,.dz.ov{border-color:var(--accent);background:var(--accent-glow);color:var(--text2);transform:scale(1.01)}
+.dz:active{transform:scale(.99)}
 .dz input{display:none}
-.dz .preview{max-width:56px;max-height:56px;border-radius:6px;margin:0 auto 8px;display:block}
+.dz .preview{max-width:56px;max-height:56px;border-radius:10px;margin:0 auto 8px;display:block}
 .dz .fname{font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--text3)}
 .logo-strip{display:flex;align-items:center;gap:10px;margin-top:10px}
-.logo-strip img{width:36px;height:36px;border-radius:6px;object-fit:contain;border:1px solid var(--border)}
-.logo-strip .remove{font-size:.72rem;color:var(--accent);cursor:pointer;font-weight:500}
-.sep{border:none;border-top:1px solid var(--border);margin:16px 0}
-.src-tabs{display:flex;gap:2px;background:var(--bg);border-radius:var(--radius);padding:3px;margin-bottom:14px}
-.src-tab{flex:1;text-align:center;padding:8px;font-size:.78rem;font-weight:500;border-radius:calc(var(--radius) - 3px);cursor:pointer;color:var(--text3);transition:all .2s}
-.src-tab.on{background:var(--surface2);color:var(--text)}
+.logo-strip img{width:38px;height:38px;border-radius:10px;object-fit:contain;border:1px solid var(--border)}
+.logo-strip .remove{font-size:.72rem;color:var(--accent);cursor:pointer;font-weight:600}
+.sep{border:none;border-top:1px solid var(--border);margin:18px 0}
+.src-tabs{display:flex;gap:2px;background:var(--surface2);border-radius:var(--radius);padding:4px;margin-bottom:14px}
+.src-tab{flex:1;text-align:center;padding:9px;font-size:.78rem;font-weight:500;border-radius:10px;cursor:pointer;color:var(--text3);transition:all .22s}
+.src-tab.on{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.12);font-weight:600}
+.src-tab:not(.on):hover{color:var(--text2)}
 .src-tb{display:none}.src-tb.on{display:block}
 .status{font-size:.78rem;color:var(--text3);font-family:'JetBrains Mono',monospace;text-align:center;min-height:1.2em;margin:8px 0 16px}.status.err{color:var(--err)}
-.qr-frame{background:#fff;border-radius:var(--radius-lg);padding:16px;max-width:440px;margin:0 auto 16px;box-shadow:0 8px 40px rgba(0,0,0,.4)}
-.qr-frame canvas{display:block;width:100%;height:auto;border-radius:8px}
+.qr-frame{background:#fff;border-radius:var(--radius-lg);padding:18px;max-width:440px;margin:0 auto 16px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.qr-frame canvas{display:block;width:100%;height:auto;border-radius:10px}
 .carousel{display:flex;gap:10px;overflow-x:auto;padding:6px 0 16px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .vcard{flex:0 0 100px;cursor:pointer;scroll-snap-align:start;transition:transform .2s}
+.vcard:hover{transform:translateY(-2px)}
 .vcard.sel{transform:scale(1.05)}
-.vcard .vthumb{background:#fff;border-radius:var(--radius);padding:5px;border:2px solid transparent;transition:border-color .2s}
+.vcard .vthumb{background:#fff;border-radius:var(--radius);padding:5px;border:2px solid transparent;transition:border-color .2s;box-shadow:0 4px 14px rgba(0,0,0,.12)}
 .vcard.sel .vthumb{border-color:var(--accent)}
-.vcard .vthumb canvas{display:block;width:100%;height:auto;border-radius:6px}
+.vcard .vthumb canvas{display:block;width:100%;height:auto;border-radius:8px}
 .vcard .vlabel{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-top:5px}
 .vcard.sel .vlabel{color:var(--accent);font-weight:600}
-.src-info{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-size:.8rem;color:var(--text2);margin-bottom:14px}
-.src-info img{width:32px;height:32px;border-radius:6px;object-fit:contain}
+.src-info{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);font-size:.8rem;color:var(--text2);margin-bottom:14px}
+.src-info img{width:34px;height:34px;border-radius:10px;object-fit:contain}
 .pal{display:flex;gap:3px;margin-left:auto}
-.pal .sw{width:12px;height:12px;border-radius:3px;border:1px solid var(--border)}
+.pal .sw{width:12px;height:12px;border-radius:4px;border:1px solid var(--border)}
 .adv-toggle{text-align:center;margin-bottom:16px}
-.adv-toggle button{background:none;border:1px solid var(--border);border-radius:var(--radius);padding:8px 18px;color:var(--text3);font-size:.78rem;cursor:pointer;font-weight:500;transition:all .2s}
-.adv-toggle button:hover{border-color:var(--accent);color:var(--text2)}
-.adv-panel{display:none;margin-bottom:16px}.adv-panel.open{display:block}
-.gen-btn{width:100%;padding:14px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .15s;margin-bottom:20px;letter-spacing:.01em}
-.gen-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 24px var(--accent-glow)}
-.gen-btn:active{transform:translateY(0)}
-.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.adv-toggle button{background:var(--surface);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:9px 20px;color:var(--text3);font-size:.78rem;cursor:pointer;font-weight:600;transition:all .22s}
+.adv-toggle button:hover{border-color:var(--accent);color:var(--text2);transform:translateY(-1px)}
+.adv-panel{display:none;margin-bottom:16px}.adv-panel.open{display:block;animation:secIn .3s ease}
+/* 主按钮: iOS 蓝渐变 */
+.gen-btn{width:100%;padding:15px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .22s cubic-bezier(.32,.72,.35,1);margin-bottom:20px;letter-spacing:.02em;box-shadow:0 10px 28px var(--accent-glow)}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px var(--accent-glow);filter:brightness(1.06)}
+.gen-btn:active{transform:scale(.98);box-shadow:0 4px 14px var(--accent-glow)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;filter:none}
 .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
-.footer{margin-top:auto;padding:20px;text-align:center;font-size:.72rem;color:var(--text3);border-top:1px solid var(--border);line-height:1.8}
-.footer a{color:var(--text2);text-decoration:none}.footer a:hover{color:var(--accent)}
-@media(max-width:600px){.shell{padding:16px 14px 48px}.hdr{padding:28px 0 20px}.r2,.r3{grid-template-columns:1fr 1fr}.card{padding:16px}.type-pills{gap:5px}.pill{padding:6px 11px;font-size:.74rem}.qr-tmpl-frame,.qr-frame{max-width:100%}.theme-toggle{position:static;margin:0 auto 12px;width:fit-content}.hdr{padding-top:8px}.phone-row select{width:100px}.tip .tip-text{width:220px;left:0;transform:none}}
+.hint{font-size:.74rem;color:var(--text3);line-height:1.65;margin-top:8px}
+.footer{margin-top:auto;padding:24px 16px;text-align:center;font-size:.72rem;color:var(--text3);line-height:2}
+.footer a{color:var(--text2);text-decoration:none;font-weight:600;transition:color .2s}.footer a:hover{color:var(--accent)}
+.footer .beian{display:inline-block;margin-top:2px;font-size:.68rem;color:var(--text3);letter-spacing:1px;border:1px solid var(--border);border-radius:6px;padding:2px 10px;background:var(--surface2)}
+@media(max-width:600px){.shell{padding:16px 14px 48px}.hdr{padding:30px 0 22px}.r2,.r3{grid-template-columns:1fr 1fr}.card{padding:18px 16px}.type-pills{gap:6px}.pill{padding:7px 13px;font-size:.74rem}.qr-tmpl-frame,.qr-frame{max-width:100%}.theme-toggle{position:static;margin:0 auto 14px;width:fit-content}.hdr{padding-top:10px}.phone-row select{width:100px}.tip .tip-text{width:220px;left:0;transform:none}.mode-btn{padding:9px 4px;font-size:.78rem}.mode-btn .sub{font-size:.66rem}}
 .party-mode .hdr h1{animation:rainbow 2s linear infinite}
 .party-mode .card,.party-mode .mode-bar{border-image:linear-gradient(90deg,#ec4899,#f59e0b,#22c55e,#3b82f6,#8b5cf6,#ec4899) 1;animation:borderShift 3s linear infinite}
 .party-mode .gen-btn,.party-mode .mode-btn.on{animation:btnPulse 1s ease-in-out infinite alternate}
@@ -145,19 +191,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <button onclick="setTheme('light')" id="theme-light">☀️</button>
       <button class="on" onclick="setTheme('dark')" id="theme-dark">🌙</button>
     </div>
-    <h1>QR <span>Studio</span></h1>
-    <p>标准与品牌二维码，轻量无臃肿</p>
+    <h1>在线二维码处理工具</h1>
+    <p>二维码生成 · 合并收款码 · 图片码，一站式处理</p>
   </div>
   <div class="mode-bar">
     <button class="mode-btn on" data-mode="standard" onclick="setMode('standard')">标准<span class="sub">经典二维码</span></button>
     <button class="mode-btn" data-mode="chroma" onclick="setMode('chroma')">ChromaCode<span class="sub">图像融合马赛克</span></button>
     <button class="mode-btn" data-mode="scanner" onclick="setMode('scanner')">扫码<span class="sub">读取并解码二维码</span></button>
+    <button class="mode-btn" data-mode="paymerge" onclick="setMode('paymerge')">合并收款码<span class="sub">微信+支付宝二合一</span></button>
   </div>
 
   <!-- ══════ STANDARD ══════ -->
   <div class="sec on" id="sec-standard">
     <div class="type-pills" id="type-pills">
-      <div class="pill on" data-type="url">网址</div><div class="pill" data-type="text">文本</div><div class="pill" data-type="wifi">WiFi</div><div class="pill" data-type="email">邮件</div><div class="pill" data-type="phone">电话</div><div class="pill" data-type="sms">短信</div><div class="pill" data-type="whatsapp">WhatsApp</div><div class="pill" data-type="location">位置</div><div class="pill" data-type="calendar">日历</div><div class="pill" data-type="vcard">vCard</div><div class="pill" data-type="duitnow" style="background:linear-gradient(135deg,#ED2E67,#c4235a);color:#fff;border-color:#ED2E67">🇲🇾 DuitNow</div>
+      <div class="pill on" data-type="url">网址</div><div class="pill" data-type="text">文本</div><div class="pill" data-type="wifi">WiFi</div><div class="pill" data-type="email">邮件</div><div class="pill" data-type="phone">电话</div><div class="pill" data-type="sms">短信</div><div class="pill" data-type="whatsapp">WhatsApp</div><div class="pill" data-type="location">位置</div><div class="pill" data-type="calendar">日历</div><div class="pill" data-type="vcard">电子名片</div><div class="pill" data-type="duitnow" style="background:linear-gradient(135deg,#ED2E67,#c4235a);color:#fff;border-color:#ED2E67">🇲🇾 DuitNow</div><div class="pill" data-type="imgqr">🖼️ 图片码</div>
     </div>
     <div class="card">
       <div class="dp on" id="dp-url"><div class="field"><input class="inp" id="in-url" placeholder="https://example.com" spellcheck="false"><div class="val-msg" id="v-url"></div></div></div>
@@ -222,6 +269,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
     </div>
     <div class="link-box" id="std-link-box"><div class="link-label">编码数据</div><div class="link-val" id="std-link-val"></div><button class="copy-btn" onclick="copyLink()">复制</button></div>
     <div class="card">
+      <div class="dp" id="dp-imgqr"><div class="field"><label>上传图片</label><div class="dz" id="iq-dz"><span id="iq-tip">点击或拖放上传图片（≤5MB）</span><input type="file" id="iq-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="iq-msg"></div><div class="hint">上传后生成二维码，手机扫码即可查看图片。图片保存在云端，可长期访问。</div></div></div>
       <div class="card-title">样式与颜色</div>
       <div class="row r3">
         <div class="field"><label>二维码颜色</label><input type="color" class="inp" id="std-fg" value="#000000"></div>
@@ -231,7 +279,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <div class="presets" id="color-presets"><div class="preset" data-fg="#000000" data-bg="#ffffff" style="background:#fff"><div class="fg" style="background:#000"></div></div><div class="preset" data-fg="#ffffff" data-bg="#000000" style="background:#000"><div class="fg" style="background:#fff"></div></div><div class="preset" data-fg="#1a365d" data-bg="#e2e8f0" style="background:#e2e8f0"><div class="fg" style="background:#1a365d"></div></div><div class="preset" data-fg="#7c2d12" data-bg="#fef3c7" style="background:#fef3c7"><div class="fg" style="background:#7c2d12"></div></div><div class="preset" data-fg="#166534" data-bg="#dcfce7" style="background:#dcfce7"><div class="fg" style="background:#166534"></div></div><div class="preset" data-fg="#7e22ce" data-bg="#f3e8ff" style="background:#f3e8ff"><div class="fg" style="background:#7e22ce"></div></div><div class="preset" data-fg="#0369a1" data-bg="#e0f2fe" style="background:#e0f2fe"><div class="fg" style="background:#0369a1"></div></div></div>
       <div class="contrast-warn" id="contrast-warn">⚠ 对比度过低 — 可能影响扫码</div>
       <hr class="sep">
-      <div class="row r3"><div class="field"><label>分辨率</label><select class="inp" id="std-res"><option value="256">256px</option><option value="512" selected>512px</option><option value="1024">1024px</option><option value="2048">2048px</option></select></div><div class="field"><label>模板</label><select class="inp" id="std-tmpl"><option value="classic">经典</option><option value="christmas">🎄 圣诞节</option><option value="halloween">🎃 万圣节</option><option value="newyear">🎆 新年</option><option value="easter">🥚 复活节</option><option value="valentine">💝 情人节</option><option value="stpatricks">☘️ 圣帕特里克节</option><option value="birthday">🎂 生日</option></select></div><div class="field"><label>中心 Logo</label><div class="dz" id="std-logo-dz" style="padding:8px;font-size:.74rem"><span id="std-logo-prompt">点击上传</span><input type="file" id="std-logo-fi" accept="image/*"></div></div></div>
+      <div class="row r3"><div class="field"><label>分辨率</label><select class="inp" id="std-res"><option value="256">256px</option><option value="512" selected>512px</option><option value="1024">1024px</option><option value="2048">2048px</option></select></div><div class="field"><label>模板</label><select class="inp" id="std-tmpl"><option value="classic">⬛ 经典方块</option><option value="rounded">🔳 圆角</option><option value="dots">⚫ 墨点</option><option value="droplet">💧 水滴</option><option value="neon">🌈 霓虹渐变</option></select></div><div class="field"><label>中心 Logo</label><div class="dz" id="std-logo-dz" style="padding:8px;font-size:.74rem"><span id="std-logo-prompt">点击上传</span><input type="file" id="std-logo-fi" accept="image/*"></div></div></div>
       <div id="std-logo-strip" class="logo-strip" style="display:none"><img id="std-logo-preview"><span class="remove" onclick="clearStdLogo()">✕ 移除</span></div>
       <hr class="sep">
       <div class="field"><label>描边宽度 — <span class="rv" id="stroke-val">0%</span></label><input type="range" id="std-stroke" min="0" max="13" value="0"></div>
@@ -279,6 +327,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
         <button class="dl-btn" onclick="ccDlPNG()"><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PNG</button>
         <button class="dl-btn" onclick="ccDlSVG()"><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>SVG</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ══════ PAYMERGE ══════ -->
+  <div class="sec" id="sec-paymerge">
+    <div class="card">
+      <div class="card-title">合并收款码 <span style="font-weight:400;color:var(--text3);font-size:.75rem">微信 + 支付宝二合一</span></div>
+      <p style="font-size:.8rem;color:var(--text2);line-height:1.7;margin-bottom:16px">分别上传你的<strong>微信收款码</strong>和<strong>支付宝收款码</strong>图片，工具会在本地解码校验后，用物理合并技术生成一张二合一收款码：微信扫走微信、支付宝扫走支付宝。<span style="color:var(--text3)">所有处理都在浏览器本地完成，图片不会上传。</span></p>
+      <div class="row r2">
+        <div class="field"><label>微信收款码</label><div class="dz" id="pm-wx-dz"><span id="pm-wx-tip">点击上传微信收款码</span><input type="file" id="pm-wx-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-wx-msg"></div></div>
+        <div class="field"><label>支付宝收款码</label><div class="dz" id="pm-ali-dz"><span id="pm-ali-tip">点击上传支付宝收款码</span><input type="file" id="pm-ali-fi" accept="image/*" style="display:none"></div><div class="val-msg" id="pm-ali-msg"></div></div>
+      </div>
+      <div class="field" style="margin-top:4px"><label>支付宝码覆盖比例 <span id="pm-ratio-val" style="color:var(--accent);font-weight:600">50%</span></label><div class="range-row"><input type="range" id="pm-ratio" min="35" max="60" value="50"><span class="rv">35%–60%</span></div><div class="hint">覆盖越大支付宝越好认，但别超过微信码纠错能力。默认 50%。</div></div>
+    </div>
+    <div class="preview-area" id="pm-preview-area">
+      <div class="qr-frame"><canvas id="pm-canvas"></canvas></div>
+      <div class="dl-row">
+        <button class="dl-btn" onclick="pmDownload()"><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载合并收款码 PNG</button>
+      </div>
+      <div class="hint" style="text-align:center">⚠️ 生成后请分别用<strong>微信</strong>和<strong>支付宝</strong>扫码测试：微信应跳转微信支付，支付宝应唤起支付宝付款。如识别不准，可微调上方覆盖比例后重新生成。</div>
     </div>
   </div>
 
@@ -352,8 +420,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
 </div>
 <div class="footer">
-  QR Studio 出品：<a href="https://github.com/deadboy18" target="_blank">deadboy18</a> · ChromaCode 算法：<a href="https://github.com/TomsNimanis/chromacode" target="_blank">Toms Nimanis / IT Linden</a> · DuitNow EMV 研究：<a href="https://github.com/natsu90/duitnowqr-test" target="_blank">natsu90</a> · <a href="https://docs.developer.paynet.my/docs" target="_blank">PayNet 开发者文档</a><br>
-  特别感谢 <a href="https://github.com/VenimK" target="_blank">VenimK</a> ❤️
+  <a href="https://633668.xyz" target="_blank" style="font-weight:600">志远</a> 出品 · ChromaCode 算法：<a href="https://github.com/TomsNimanis/chromacode" target="_blank">Toms Nimanis / IT Linden</a> · DuitNow EMV 研究：<a href="https://github.com/natsu90/duitnowqr-test" target="_blank">natsu90</a><br>
+  <span class="beian">东南亚金三角特区 字797号</span>
 </div>
 <script>
 // ═══════ THEME ═══════
@@ -362,7 +430,7 @@ function setTheme(t){document.documentElement.setAttribute('data-theme',t);docum
 
 // ═══════ MODE ═══════
 let jsQRLoaded=typeof jsQR!=='undefined';
-function setMode(m){document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+m));if(m!=='scanner'&&typeof stopCamera==='function')stopCamera();if(m==='scanner'&&!jsQRLoaded){const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';s.onload=()=>{jsQRLoaded=true};document.head.appendChild(s)}}
+function setMode(m){document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+m));if(m!=='scanner'&&typeof stopCamera==='function')stopCamera();if((m==='scanner'||m==='paymerge')&&!jsQRLoaded){const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';s.onload=()=>{jsQRLoaded=true};document.head.appendChild(s)}}
 
 // ═══════ COUNTRY CODES ═══════
 function flagEmoji(cc){return String.fromCodePoint(...cc.toUpperCase().split('').map(c=>127397+c.charCodeAt(0)))}
@@ -437,6 +505,7 @@ function getStdData(){
     case 'calendar':{const t=document.getElementById('cal-title').value.trim();if(!t)return'';const allDay=document.getElementById('cal-allday').checked,sd=document.getElementById('cal-sd').value,st=document.getElementById('cal-st').value,ed=document.getElementById('cal-ed').value,et=document.getElementById('cal-et').value;const fmt=(d,ti)=>(d||'').replace(/-/g,'')+(allDay?'':'T'+(ti||'0000').replace(/:/g,'')+'00');let ics=`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${t}`;const desc=document.getElementById('cal-desc').value,loc=document.getElementById('cal-loc').value;if(desc)ics+=`\nDESCRIPTION:${desc}`;if(loc)ics+=`\nLOCATION:${loc}`;if(sd)ics+=`\nDTSTART:${fmt(sd,st)}`;if(ed)ics+=`\nDTEND:${fmt(ed,et)}`;else if(sd)ics+=`\nDTEND:${fmt(sd,et||st)}`;return ics+'\nEND:VEVENT\nEND:VCALENDAR'}
     case 'vcard':{const fn=document.getElementById('vc-fn').value.trim(),ln=document.getElementById('vc-ln').value.trim();if(!fn&&!ln)return'';let v=`BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn}\nFN:${fn} ${ln}`;const ph=document.getElementById('vc-phone').value.trim().replace(/[\s\-\(\)]/g,''),em=document.getElementById('vc-email').value.trim(),org=document.getElementById('vc-org').value.trim();let url=document.getElementById('vc-url').value.trim();if(ph)v+=`\nTEL:${document.getElementById('vc-cc').value}${ph}`;if(em)v+=`\nEMAIL:${em}`;if(org)v+=`\nORG:${org}`;if(url){if(!/^https?:\/\//i.test(url)&&url.includes('.'))url='https://'+url;v+=`\nURL:${url}`}return v+'\nEND:VCARD'}
     case 'duitnow':{return buildDuitNowEMV()}
+    case 'imgqr':{return window._imgqrUrl||''}
   }
   return'';
 }
@@ -502,6 +571,39 @@ function copyLink(){navigator.clipboard.writeText(document.getElementById('std-l
 
 // ═══════ LIVE GENERATE ═══════
 let _genTimer=null;
+// ═══════ 二维码样式渲染器(5 种) ═══════
+// 铁律: 保留静区 + 定位角结构清晰 + 高对比, 确保可扫
+function qrIsEye(r,c,n){return (r<7&&c<7)||(r<7&&c>=n-7)||(r>=n-7&&c<7)}
+function drawStyledQR(ctx,qr,n,ox,oy,cell,fg,bg,style){
+  ctx.fillStyle=bg;ctx.fillRect(ox-cell*0,oy-cell*0,(n)*cell+cell*0,(n)*cell); // 背景由调用方铺, 此处仅画模块
+  const X=c=>ox+c*cell, Y=r=>oy+r*cell;
+  const eyeAt=(er,ec)=>({x:X(ec),y:Y(er),s:cell*7});
+  // 渐变(霓虹用)
+  let grad=null;
+  if(style==='neon'){grad=ctx.createLinearGradient(ox,oy,ox+n*cell,oy+n*cell);grad.addColorStop(0,'#0a84ff');grad.addColorStop(.5,'#5e5ce6');grad.addColorStop(1,'#ff375f')}
+  const fill=grad||fg;
+  // —— 数据模块 ——
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+    if(!qr.isDark(r,c)||qrIsEye(r,c,n))continue;
+    const x=X(c),y=Y(r);
+    if(style==='classic'){ctx.fillStyle=fill;ctx.fillRect(x,y,cell,cell)}
+    else if(style==='rounded'){ctx.fillStyle=fill;const rad=cell*.32,g=cell*.06;ctx.beginPath();ctx.roundRect(x+g,y+g,cell-g*2,cell-g*2,rad);ctx.fill()}
+    else if(style==='dots'){ctx.fillStyle=fill;ctx.beginPath();ctx.arc(x+cell/2,y+cell/2,cell*.48,0,7);ctx.fill()}
+    else if(style==='droplet'){ctx.fillStyle=fill;ctx.beginPath();ctx.ellipse(x+cell/2,y+cell/2,cell*.44,cell*.5,0,0,7);ctx.fill()}
+    else if(style==='neon'){ctx.fillStyle=fill;const rad=cell*.3,g=cell*.05;ctx.beginPath();ctx.roundRect(x+g,y+g,cell-g*2,cell-g*2,rad);ctx.fill()}
+  }
+  // —— 定位角(3 个): 统一用方形/圆角方形, 确保所有扫码器都能识别 ——
+  // 实测圆形定位角会导致 jsQR 及部分手机扫码失败, 故数据模块可风格化, 定位角保持标准结构
+  const eyes=[[0,0],[0,n-7],[n-7,0]];
+  const erad=style==='classic'?0:cell*.9;
+  for(const [er,ec] of eyes){
+    const ex=X(ec),ey=Y(er),es=cell*7;
+    ctx.fillStyle=fill;
+    ctx.beginPath();ctx.roundRect(ex,ey,es,es,erad);ctx.fill();
+    ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(ex+cell,ey+cell,es-cell*2,es-cell*2,Math.max(0,erad-cell*.5));ctx.fill();
+    ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(ex+cell*2,ey+cell*2,es-cell*4,es-cell*4,Math.max(0,erad-cell));ctx.fill();
+  }
+}
 function liveGenerate(){clearTimeout(_genTimer);_genTimer=setTimeout(()=>generateStandard(),80)}
 function generateStandard(){
   const isValid=validateAll(),data=getStdData();updateLinkBox(data);
@@ -522,14 +624,14 @@ function generateStandard(){
   if(curType==='wifi'){if(document.getElementById('wifi-show-ssid').checked){const v=document.getElementById('wifi-ssid').value.trim();if(v)wifiLines.push('📶  '+v)}if(document.getElementById('wifi-show-pass').checked){const v=document.getElementById('wifi-pass').value;if(v)wifiLines.push('🔑  '+v)}if(document.getElementById('wifi-show-enc').checked){wifiLines.push('🔒  '+(document.getElementById('wifi-enc').value||'Open'))}}
   const lineH=Math.round(realSize*.06),textPad=wifiLines.length?Math.round(lineH*.6):0,extraH=wifiLines.length?(wifiLines.length*lineH+textPad*2):0;
   canvas.width=realSize;canvas.height=realSize+extraH;
-  const ctx=canvas.getContext('2d');ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle=fg;
+  const ctx=canvas.getContext('2d');ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);
   const offset=quietMod*scale;
-  for(let r=0;r<modules;r++)for(let c=0;c<modules;c++)if(qr.isDark(r,c))ctx.fillRect(offset+c*scale,offset+r*scale,scale,scale);
+  drawStyledQR(ctx,qr,modules,offset,offset,scale,fg,bg,tmpl);
   if(outline){const gap=Math.max(4,Math.round(realSize*.02));ctx.strokeStyle=fg;ctx.lineWidth=Math.max(3,Math.round(realSize*.012));ctx.strokeRect(gap,gap,realSize-gap*2,realSize-gap*2)}
   if(stdLogoImg){const ls=(modules*scale)*.22,x=offset+(modules*scale-ls)/2,pad=ls*.1;ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(x-pad,x-pad,ls+pad*2,ls+pad*2,8);ctx.fill();ctx.drawImage(stdLogoImg,x,x,ls,ls)}
   if(wifiLines.length){const fs=Math.round(lineH*.55);ctx.font=`500 ${fs}px "DM Sans",system-ui,sans-serif`;ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='top';ctx.strokeStyle=fg;ctx.globalAlpha=.2;ctx.lineWidth=Math.max(1,Math.round(realSize*.003));ctx.beginPath();ctx.moveTo(realSize*.15,realSize+textPad*.3);ctx.lineTo(realSize*.85,realSize+textPad*.3);ctx.stroke();ctx.globalAlpha=1;wifiLines.forEach((l,i)=>ctx.fillText(l,realSize/2,realSize+textPad+i*lineH))}
   const wifiDisp=document.getElementById('wifi-info-display');if(curType==='wifi'&&wifiLines.length){wifiDisp.style.display='block';document.getElementById('wifi-info-items').innerHTML=wifiLines.map(l=>`<div>${l}</div>`).join('')}else wifiDisp.style.display='none';
-  const frame=document.getElementById('std-frame');frame.className='qr-tmpl-frame';if(tmpl!=='classic')frame.classList.add('t-'+tmpl);
+  document.getElementById('std-frame').className='qr-tmpl-frame';
   document.getElementById('std-preview-area').classList.add('on');
   window._stdCanvas=canvas;window._stdData=data;window._stdFg=fg;window._stdBg=bg;window._stdEcc=ecc;
 }
@@ -587,8 +689,127 @@ function renderDuitNowGen(raw){
 
 // ═══════ STANDARD DOWNLOADS ═══════
 function dlStdPNG(){const c=window._stdCanvas;if(!c)return;c.toBlob(b=>{const a=document.createElement('a');a.download='qr-code.png';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()},'image/png')}
-function dlStdSVG(){const d=window._stdData;if(!d)return;const ecc=window._stdEcc||'M',fg=window._stdFg||'#000',bg=window._stdBg||'#fff';const qr=qrcode(0,ecc);qr.addData(d);qr.make();const sz=qr.getModuleCount(),cell=10,t=sz*cell;let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 ${t} ${t}"><rect width="${t}" height="${t}" fill="${bg}"/>`;for(let r=0;r<sz;r++)for(let c=0;c<sz;c++)if(qr.isDark(r,c))svg+=`<rect x="${c*cell}" y="${r*cell}" width="${cell}" height="${cell}" fill="${fg}"/>`;svg+='</svg>';const b=new Blob([svg],{type:'image/svg+xml'});const a=document.createElement('a');a.download='qr-code.svg';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()}
+function dlStdSVG(){const d=window._stdData;if(!d)return;const ecc=window._stdEcc||'M',fg=window._stdFg||'#000',bg=window._stdBg||'#fff';const tmpl=document.getElementById('std-tmpl').value||'classic';const qr=qrcode(0,ecc);qr.addData(d);qr.make();const sz=qr.getModuleCount(),cell=10,t=sz*cell;let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 ${t} ${t}"><rect width="${t}" height="${t}" fill="${bg}"/>`;const eye=(r,c)=> (r<7&&c<7)||(r<7&&c>=sz-7)||(r>=sz-7&&c<7);for(let r=0;r<sz;r++)for(let c=0;c<sz;c++){if(!qr.isDark(r,c)||eye(r,c))continue;const x=c*cell,y=r*cell;if(tmpl==='dots')svg+=`<circle cx="${x+cell/2}" cy="${y+cell/2}" r="${cell*.48}" fill="${fg}"/>`;else if(tmpl==='droplet')svg+=`<ellipse cx="${x+cell/2}" cy="${y+cell/2}" rx="${cell*.44}" ry="${cell*.5}" fill="${fg}"/>`;else if(tmpl==='rounded'||tmpl==='neon')svg+=`<rect x="${x+cell*.06}" y="${y+cell*.06}" width="${cell*.88}" height="${cell*.88}" rx="${cell*.3}" fill="${fg}"/>`;else svg+=`<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${fg}"/>`}
+const eyes=[[0,0],[0,sz-7],[sz-7,0]];const erad=tmpl==='classic'?0:cell*.9;for(const[er,ec]of eyes){const ex=ec*cell,ey=er*cell,es=cell*7;svg+=`<rect x="${ex}" y="${ey}" width="${es}" height="${es}" rx="${erad}" fill="${fg}"/><rect x="${ex+cell}" y="${ey+cell}" width="${es-cell*2}" height="${es-cell*2}" rx="${Math.max(0,erad-cell*.5)}" fill="${bg}"/><rect x="${ex+cell*2}" y="${ey+cell*2}" width="${es-cell*4}" height="${es-cell*4}" rx="${Math.max(0,erad-cell)}" fill="${fg}"/>`}
+svg+='</svg>';const b=new Blob([svg],{type:'image/svg+xml'});const a=document.createElement('a');a.download='qr-code.svg';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()}
 async function shareStd(){const c=window._stdCanvas;if(!c)return;try{const b=await new Promise(r=>c.toBlob(r,'image/png'));const f=new File([b],'qr-code.png',{type:'image/png'});if(navigator.canShare?.({files:[f]})){await navigator.share({files:[f]});return}}catch{}dlStdPNG()}
+
+// ═══════════════════════════════════════
+// PAYMERGE — 合并收款码(物理合并版)
+// ═══════════════════════════════════════
+const PM_WX_OK=['wxp://','weixin.qq.com','wechatpay.cn'];
+const PM_ALI_OK=['alipay.com'];
+let pmWxData=null,pmAliData=null,pmMerged=null;
+function pmEnsureJsQR(cb){
+  if(typeof jsQR!=='undefined'){cb();return}
+  const el=document.createElement('script');el.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';
+  el.onload=()=>{jsQRLoaded=true;cb()};el.onerror=()=>{alert('jsQR 加载失败，请检查网络后重试')};
+  document.head.appendChild(el);
+}
+function pmBind(dzId,fiId,tipId,msgId,whitelist,errLabel,assign){
+  const dz=document.getElementById(dzId),fi=document.getElementById(fiId);
+  dz.onclick=()=>fi.click();
+  dz.ondragover=e=>{e.preventDefault();dz.classList.add('ov')};
+  dz.ondragleave=()=>dz.classList.remove('ov');
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])pmReadFile(e.dataTransfer.files[0],tipId,msgId,whitelist,errLabel,assign)};
+  fi.onchange=e=>{if(e.target.files[0])pmReadFile(e.target.files[0],tipId,msgId,whitelist,errLabel,assign);fi.value=''};
+}
+function pmReadFile(f,tipId,msgId,whitelist,errLabel,assign){
+  const msg=document.getElementById(msgId);
+  msg.textContent='';msg.className='val-msg';
+  if(!f.type.startsWith('image/')){msg.textContent='请上传图片文件';msg.classList.add('err');return}
+  pmEnsureJsQR(()=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const code=pmDecode(img);
+        if(!code){msg.textContent='图片中未识别到二维码，请上传清晰的收款码截图';msg.classList.add('err');return}
+        const low=code.toLowerCase();
+        if(!whitelist.some(w=>low.includes(w))){msg.textContent='这不是'+errLabel+'收款码，请重新上传';msg.classList.add('err');return}
+        document.getElementById(tipId).innerHTML='<img class="preview" src="'+e.target.result+'" style="max-height:90px;border-radius:8px">✓ 已识别';
+        msg.textContent='';assign(code);pmTryMerge();
+      };
+      img.onerror=()=>{msg.textContent='图片读取失败';msg.classList.add('err')};
+      img.src=e.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+}
+function pmDecode(img){
+  try{
+    const c=document.createElement('canvas');c.width=img.naturalWidth||img.width;c.height=img.naturalHeight||img.height;
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0,c.width,c.height);
+    const d=x.getImageData(0,0,c.width,c.height);
+    const res=jsQR(d.data,d.width,d.height,{inversionAttempts:'dontInvert'});
+    return res&&res.data?res.data:null;
+  }catch(e){return null}
+}
+function pmMakeQR(data,size){
+  const qr=qrcode(0,'H');
+  qr.addData(data);qr.make();
+  const n=qr.getModuleCount(),c=document.createElement('canvas');
+  c.width=c.height=size;const x=c.getContext('2d'),cell=size/n;
+  x.fillStyle='#fff';x.fillRect(0,0,size,size);x.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let col=0;col<n;col++)if(qr.isDark(r,col))x.fillRect(Math.floor(col*cell),Math.floor(r*cell),Math.ceil(cell),Math.ceil(cell));
+  return c;
+}
+function pmLoadCanvas(c){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=c.toDataURL()})}
+async function pmTryMerge(){
+  if(!pmWxData||!pmAliData)return;
+  const S=1200,ratio=+document.getElementById('pm-ratio').value/100;
+  const wxC=pmMakeQR(pmWxData,S);
+  const aliC=pmMakeQR(pmAliData,S);
+  // 支付宝码: 清除右下角一块区域(破坏微信对其定位的识别), 参考 PayQrcode
+  const ax=aliC.getContext('2d'),cw=(S/2)*0.9;
+  ax.clearRect(S/2,S-cw,S/2,cw);
+  const wxImg=await pmLoadCanvas(wxC),aliImg=await pmLoadCanvas(aliC);
+  const c=document.getElementById('pm-canvas');c.width=c.height=S;
+  const x=c.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,S,S);
+  x.drawImage(wxImg,0,0,S,S);
+  // 支付宝码旋转180°后叠放在微信码右下角
+  const as=S*ratio;
+  x.save();x.translate(S-as/2,S-as/2);x.rotate(Math.PI);
+  x.drawImage(aliImg,-as/2,-as/2,as,as);x.restore();
+  pmMerged=c;
+  document.getElementById('pm-preview-area').classList.add('on');
+}
+function pmDownload(){
+  if(!pmMerged)return;
+  pmMerged.toBlob(b=>{const a=document.createElement('a');a.download='合并收款码.png';a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove()},'image/png');
+}
+pmBind('pm-wx-dz','pm-wx-fi','pm-wx-tip','pm-wx-msg',PM_WX_OK,'微信',v=>pmWxData=v);
+pmBind('pm-ali-dz','pm-ali-fi','pm-ali-tip','pm-ali-msg',PM_ALI_OK,'支付宝',v=>pmAliData=v);
+document.getElementById('pm-ratio').oninput=function(){document.getElementById('pm-ratio-val').textContent=this.value+'%';pmTryMerge()};
+
+// ═══════════════════════════════════════
+// IMGQR — 图片二维码
+// ═══════════════════════════════════════
+(function(){
+  const dz=document.getElementById('iq-dz'),fi=document.getElementById('iq-fi'),tip=document.getElementById('iq-tip'),msg=document.getElementById('iq-msg');
+  dz.onclick=()=>fi.click();
+  dz.ondragover=e=>{e.preventDefault();dz.classList.add('ov')};
+  dz.ondragleave=()=>dz.classList.remove('ov');
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');if(e.dataTransfer.files[0])iqUpload(e.dataTransfer.files[0])};
+  fi.onchange=e=>{if(e.target.files[0])iqUpload(e.target.files[0]);fi.value=''};
+  async function iqUpload(f){
+    msg.textContent='';msg.className='val-msg';window._imgqrUrl='';
+    if(!f.type.startsWith('image/')){msg.textContent='请上传图片文件';msg.classList.add('err');return}
+    if(f.size>5*1024*1024){msg.textContent='图片不能超过 5MB';msg.classList.add('err');return}
+    tip.textContent='上传中…';dz.style.pointerEvents='none';
+    try{
+      const fd=new FormData();fd.append('file',f);
+      const r=await fetch('/api/upload',{method:'POST',body:fd});
+      const j=await r.json();
+      if(!r.ok)throw new Error(j.error||'上传失败');
+      window._imgqrUrl='https://qqr.633668.xyz/img/'+j.id;
+      tip.innerHTML='✓ 已上传，点击可更换';
+      liveGenerate();
+    }catch(e){msg.textContent=e.message||'上传失败，请重试';msg.classList.add('err');tip.textContent='点击或拖放上传图片（≤5MB）'}
+    dz.style.pointerEvents='';
+  }
+})();
 
 // ═══════════════════════════════════════
 // CHROMACODE
@@ -650,7 +871,7 @@ scanFi.onchange=e=>scanFile(e.target.files[0]);
 function scanFile(f){if(!f||!f.type.startsWith('image/'))return;if(typeof jsQR==='undefined'){document.getElementById('scan-dp').innerHTML='<span style="color:var(--warn)">扫描器加载中…请稍后再试</span>';return}const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const c=document.getElementById('scan-canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const id=ctx.getImageData(0,0,c.width,c.height);const code=jsQR(id.data,c.width,c.height,{inversionAttempts:'attemptBoth'});if(code){showScanResult(code.data);document.getElementById('scan-dp').innerHTML=`<img class="preview" src="${r.result}" style="max-width:80px;max-height:80px"><br><span class="fname" style="color:var(--ok)">✓ 已找到二维码</span>`}else document.getElementById('scan-dp').innerHTML=`<span style="color:var(--err)">✕ 未检测到二维码</span><br><span class="fname">请换一张更清晰的图片</span>`};img.src=r.result};r.readAsDataURL(f)}
 
 // Camera
-async function toggleCamera(){if(camRunning){stopCamera();return}try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});document.getElementById('cam-video').srcObject=camStream;document.getElementById('cam-wrap').style.display='block';document.getElementById('cam-btn').textContent='⏹ 关闭相机';camRunning=true;requestAnimationFrame(scanFrame)}catch(e){alert(e.name==='NotAllowedError'?'相机权限被拒绝。QR Studio 仅需要相机权限来扫描二维码——不会录制或传输视频。':'无法访问相机：'+e.message)}}
+async function toggleCamera(){if(camRunning){stopCamera();return}try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});document.getElementById('cam-video').srcObject=camStream;document.getElementById('cam-wrap').style.display='block';document.getElementById('cam-btn').textContent='⏹ 关闭相机';camRunning=true;requestAnimationFrame(scanFrame)}catch(e){alert(e.name==='NotAllowedError'?'相机权限被拒绝。本工具仅需要相机权限来扫描二维码——不会录制或传输视频。':'无法访问相机：'+e.message)}}
 function stopCamera(){camRunning=false;if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}document.getElementById('cam-wrap').style.display='none';document.getElementById('cam-btn').textContent='📷 打开相机'}
 function scanFrame(){if(!camRunning||typeof jsQR==='undefined')return;const v=document.getElementById('cam-video');if(v.readyState!==v.HAVE_ENOUGH_DATA){requestAnimationFrame(scanFrame);return}const c=document.getElementById('cam-canvas');c.width=v.videoWidth;c.height=v.videoHeight;const ctx=c.getContext('2d');ctx.drawImage(v,0,0);const code=jsQR(ctx.getImageData(0,0,c.width,c.height).data,c.width,c.height,{inversionAttempts:'attemptBoth'});if(code){document.getElementById('cam-status').textContent='✓ 已找到！';document.getElementById('cam-status').style.background='rgba(34,197,94,.85)';showScanResult(code.data);setTimeout(()=>{if(camRunning){document.getElementById('cam-status').textContent='扫描中…';document.getElementById('cam-status').style.background='rgba(0,0,0,.7)';requestAnimationFrame(scanFrame)}},2000)}else requestAnimationFrame(scanFrame)}
 
@@ -820,7 +1041,7 @@ else if(safety.level==='warning'){card.style.borderColor='var(--warn)';el.innerH
 else{card.style.borderColor='var(--err)';el.innerHTML=`<div style="color:var(--err);font-weight:600;font-size:.9rem">🚨 可疑 — 请小心</div><div style="font-size:.78rem;color:var(--text2);margin-top:6px">${safety.detail}</div>`}
 document.getElementById('scan-result').scrollIntoView({behavior:'smooth',block:'nearest'})}
 
-function detectQRType(d){if(/^https?:\/\/wa\.me\//i.test(d))return{type:'whatsapp',label:'WhatsApp'};if(/^https?:\/\//i.test(d))return{type:'url',label:'网址'};if(/^WIFI:/i.test(d))return{type:'wifi',label:'WiFi'};if(/^mailto:/i.test(d))return{type:'email',label:'邮件'};if(/^tel:/i.test(d))return{type:'phone',label:'电话'};if(/^sms:/i.test(d))return{type:'sms',label:'短信'};if(/^geo:/i.test(d))return{type:'geo',label:'位置'};if(/^BEGIN:VCARD/i.test(d))return{type:'vcard',label:'vCard'};if(/^BEGIN:VCALENDAR/i.test(d))return{type:'calendar',label:'日历'};if(/^bitcoin:/i.test(d))return{type:'crypto',label:'比特币'};if(/^ethereum:/i.test(d))return{type:'crypto',label:'以太坊'};if(/^00020101/i.test(d)||/^00020201/i.test(d)){let isDN=false,isJP=false;try{const emv=parseEMV(d);for(let id=26;id<=51;id++){const k=id.toString().padStart(2,'0');if(emv[k]){const n=parseEMVNested(emv[k]);if(n['00']==='A0000006150001'){isDN=true;if(n['01']==='898989')isJP=true}}}}catch{}return{type:'emvpay',label:isJP?'JomPAY 🇲🇾':isDN?'DuitNow 🇲🇾':'EMV 付款'}};return{type:'text',label:'文本'}}
+function detectQRType(d){if(/^https?:\/\/wa\.me\//i.test(d))return{type:'whatsapp',label:'WhatsApp'};if(/^https?:\/\//i.test(d))return{type:'url',label:'网址'};if(/^WIFI:/i.test(d))return{type:'wifi',label:'WiFi'};if(/^mailto:/i.test(d))return{type:'email',label:'邮件'};if(/^tel:/i.test(d))return{type:'phone',label:'电话'};if(/^sms:/i.test(d))return{type:'sms',label:'短信'};if(/^geo:/i.test(d))return{type:'geo',label:'位置'};if(/^BEGIN:VCARD/i.test(d))return{type:'vcard',label:'电子名片'};if(/^BEGIN:VCALENDAR/i.test(d))return{type:'calendar',label:'日历'};if(/^bitcoin:/i.test(d))return{type:'crypto',label:'比特币'};if(/^ethereum:/i.test(d))return{type:'crypto',label:'以太坊'};if(/^00020101/i.test(d)||/^00020201/i.test(d)){let isDN=false,isJP=false;try{const emv=parseEMV(d);for(let id=26;id<=51;id++){const k=id.toString().padStart(2,'0');if(emv[k]){const n=parseEMVNested(emv[k]);if(n['00']==='A0000006150001'){isDN=true;if(n['01']==='898989')isJP=true}}}}catch{}return{type:'emvpay',label:isJP?'JomPAY 🇲🇾':isDN?'DuitNow 🇲🇾':'EMV 付款'}};return{type:'text',label:'文本'}}
 
 function analyzeQRSafety(data,type){const w=[],d=[];if(type.type==='url'){try{const u=new URL(data);if(u.protocol==='http:')w.push('使用 HTTP（未加密）。');if(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(u.hostname))d.push('裸 IP 地址网址——钓鱼常用手段。');if(data.length>500)w.push('网址异常地长。');const badTLDs=['.zip','.mov','.tk','.ml','.ga','.cf','.gq','.buzz','.top','.xyz'];if(badTLDs.some(t=>u.hostname.endsWith(t)))w.push(`可疑的域名后缀。`);const shorts=['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','is.gd','rb.gy','short.io','cutt.ly'];if(shorts.some(s=>u.hostname===s||u.hostname==='www.'+s))w.push('短链接——真实目标被隐藏。');if(u.protocol==='data:')d.push('Data URI——可能执行代码，请勿打开。');if(u.protocol==='javascript:')d.push('JavaScript 注入，请勿打开。');if(/[^\x00-\x7F]/.test(u.hostname))d.push('非 ASCII 域名（同形异义攻击）。');if(u.username||u.password)d.push('内嵌账号密码——很可能是钓鱼。');if(data.includes('@')&&type.type==='url')w.push('网址包含 @——可能跳转到别处。');if(d.length===0&&w.length===0)return{level:'safe',detail:`域名：<strong>${u.hostname}</strong> · ${u.protocol==='https:'?'HTTPS 加密':'HTTP 未加密'} · 未发现威胁。输入个人信息前请先核实域名。`}}catch{}}
 if(type.type==='wifi'){if(/P:;/.test(data)||/T:nopass/i.test(data)||/T:;/.test(data))w.push('开放 WiFi——无密码。');else return{level:'safe',detail:'有密码保护的 WiFi。连接前请核实网络名称。'}}
@@ -911,7 +1132,7 @@ function confettiBurst(){const cols=['#06b6d4','#f59e0b','#ec4899','#22c55e','#8
 function matrixRain(){const c=document.createElement('canvas');Object.assign(c.style,{position:'fixed',top:'0',left:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'99998',opacity:'.85'});c.width=window.innerWidth;c.height=window.innerHeight;document.body.appendChild(c);const ctx=c.getContext('2d');const cols=Math.floor(c.width/14),drops=new Array(cols).fill(1),chars='QRスタジオ01アイウエオカキクケコ日本語ABCDEF';let frames=0;function draw(){ctx.fillStyle='rgba(0,0,0,0.06)';ctx.fillRect(0,0,c.width,c.height);ctx.font='13px JetBrains Mono,monospace';for(let i=0;i<drops.length;i++){ctx.fillStyle=Math.random()>.95?'#fff':'#22c55e';ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*14,drops[i]*14);if(drops[i]*14>c.height&&Math.random()>.975)drops[i]=0;drops[i]++}frames++;if(frames<180)requestAnimationFrame(draw);else{c.style.transition='opacity .5s';c.style.opacity='0';setTimeout(()=>c.remove(),600)}}draw()}
 
 // Console
-console.log('%c🎨 QR Studio %c作者 deadboy18','font-size:20px;font-weight:bold;color:#06b6d4;','font-size:14px;color:#a1a1aa;');
+console.log('%c🎨 在线二维码处理工具 %c志远出品','font-size:20px;font-weight:bold;color:#06b6d4;','font-size:14px;color:#a1a1aa;');
 console.log('%c🥚 嘘……有隐藏彩蛋！','font-size:12px;color:#f59e0b;font-style:italic;');
 console.log('%c  ⬆⬆⬇⬇⬅➡⬅➡🅱🅰  %cKonami → 🎉\n%c  📱 三连击标题   %c→ 🌈 派对\n%c  📱 摇一摇手机        %c→ 🎊 五彩纸屑\n%c  ⌨️  网址框输入 matrix   %c→ 💊 红色药丸','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;','color:#22c55e;font-family:monospace;font-size:11px;','color:#a1a1aa;font-size:11px;');
 </script>
