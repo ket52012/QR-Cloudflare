@@ -179,21 +179,21 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .st-cancel{background:none;border:none;color:var(--text3);font-size:.75rem;cursor:pointer;padding:8px 4px}
 .st-cancel:hover{color:var(--warn)}
 /* 贴纸卡片(严格按整蛊贴纸风格) */
-.sticker{background:#FFD900;border:10px solid #141414;border-radius:22px;width:min(320px,88vw);margin:14px auto;padding:26px 18px 0;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.4)}
-.st-top{font-size:60px;font-weight:900;color:#141414;text-align:center;line-height:1.15;margin-bottom:18px;letter-spacing:2px}
-.st-qr{background:#fff;border-radius:8px;width:fit-content;margin:0 auto 20px;padding:12px}
+.sticker{background:#FFD900;border:10px solid #141414;border-radius:22px;width:min(320px,88vw);margin:14px auto;padding:26px 18px 22px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.4)}
+.st-top{font-size:60px;font-weight:900;color:#141414;text-align:center;line-height:1.15;margin-bottom:14px;letter-spacing:2px}
+.st-bottom{background:#141414;color:#fff;text-align:center;font-size:30px;font-weight:800;letter-spacing:5px;padding:11px 0;margin:0 -18px 18px}
+.st-qr{background:#fff;border-radius:8px;width:fit-content;margin:0 auto;padding:12px}
 .st-qr canvas{display:block;width:180px;height:180px}
-.st-bottom{background:#141414;color:#fff;text-align:center;font-size:30px;font-weight:800;letter-spacing:5px;padding:11px 0;margin:0 -18px}
 .st-actions{display:flex;justify-content:center;margin:4px 0 8px}
 @media print{
 body{background:#fff!important}
 body *{visibility:hidden!important}
 #iq-sticker-card,#iq-sticker-card *{visibility:visible!important}
-#iq-sticker-card{position:absolute!important;left:50%!important;top:.8cm!important;transform:translateX(-50%)!important;width:10cm!important;margin:0!important;box-shadow:none!important;border-width:.35cm!important;border-radius:.6cm!important;padding:.8cm .5cm 0!important}
-#iq-sticker-card .st-top{font-size:2.1cm!important;margin-bottom:.5cm!important}
-#iq-sticker-card .st-qr{padding:.3cm!important;margin:0 auto .6cm!important}
+#iq-sticker-card{position:absolute!important;left:50%!important;top:.8cm!important;transform:translateX(-50%)!important;width:10cm!important;margin:0!important;box-shadow:none!important;border-width:.35cm!important;border-radius:.6cm!important;padding:.8cm .5cm .6cm!important}
+#iq-sticker-card .st-top{font-size:2.1cm!important;margin-bottom:.4cm!important}
+#iq-sticker-card .st-bottom{font-size:1.05cm!important;letter-spacing:.2cm!important;padding:.3cm 0!important;margin:0 -.5cm .5cm!important}
+#iq-sticker-card .st-qr{padding:.3cm!important;margin:0 auto!important}
 #iq-sticker-card .st-qr canvas{width:4.6cm!important;height:4.6cm!important}
-#iq-sticker-card .st-bottom{font-size:1.05cm!important;letter-spacing:.2cm!important;padding:.3cm 0!important;margin:0 -.5cm!important}
 }
 </style>
 </head>
@@ -281,7 +281,7 @@ body *{visibility:hidden!important}
     </div>
     <div class="link-box" id="std-link-box"><div class="link-label">编码数据</div><div class="link-val" id="std-link-val"></div><button class="copy-btn" onclick="copyLink()">复制</button></div>
     <div class="card">
-      <div class="dp" id="dp-imgqr"><div class="field"><label>图片链接</label><input class="inp" id="iq-url" placeholder="请粘贴图片直链" spellcheck="false"><div class="val-msg" id="iq-msg"></div><div class="field"><label class="chk"><input type="checkbox" id="iq-direct"> 直接使用原图链接（跳过展示页）</label></div><div class="hint">填入图片的直链地址，生成二维码后手机扫码即在展示页中查看图片。<br>本工具为纯在线处理，不存储任何图片与数据 — 展示页仅实时加载你填写的链接。有图床请用自己的图床，没有可自行搜索免费图床。</div><div class="sticker-sec"><div class="sticker-sec-head">🎭 整蛊贴纸<span>整蛊专用，贴朋友车上扫码即显示</span></div><div class="st-presets"><button type="button" class="st-preset" data-p="benz">共享奔驰</button><button type="button" class="st-preset" data-p="bmw">共享宝马</button><button type="button" class="st-preset" data-p="tesla">共享特斯拉</button><button type="button" class="st-preset" data-p="landrover">共享路虎</button></div><div class="st-custom"><input class="inp" id="iq-custom" placeholder="自定义品牌，如：保时捷" maxlength="8" spellcheck="false"><button type="button" class="st-use" id="iq-custom-btn">使用</button></div><button type="button" class="st-cancel" id="iq-sticker-cancel" style="display:none">✖ 取消贴纸，用回图片链接</button><div id="iq-sticker-preview" style="display:none"><div class="sticker" id="iq-sticker-card"><div class="st-top" id="iq-st-top">共享宝马</div><div class="st-qr"><canvas id="iq-st-qr"></canvas></div><div class="st-bottom">扫码就能免费开</div></div><div class="st-actions"><button type="button" class="dl-btn" onclick="window.print()">🖨️ 打印贴纸</button></div></div></div></div></div>
+      <div class="dp" id="dp-imgqr"><div class="field"><label>图片链接</label><input class="inp" id="iq-url" placeholder="请粘贴图片直链" spellcheck="false"><div class="val-msg" id="iq-msg"></div><div class="field"><label class="chk"><input type="checkbox" id="iq-direct"> 直接使用原图链接（跳过展示页）</label></div><div class="hint">填入图片的直链地址，生成二维码后手机扫码即在展示页中查看图片。<br>本工具为纯在线处理，不存储任何图片与数据 — 展示页仅实时加载你填写的链接。有图床请用自己的图床，没有可自行搜索免费图床。</div><div class="sticker-sec"><div class="sticker-sec-head">🎭 整蛊贴纸<span>整蛊专用，贴朋友车上扫码即显示</span></div><div class="st-presets"><button type="button" class="st-preset" data-p="benz">共享奔驰</button><button type="button" class="st-preset" data-p="bmw">共享宝马</button><button type="button" class="st-preset" data-p="tesla">共享特斯拉</button><button type="button" class="st-preset" data-p="landrover">共享路虎</button></div><div class="st-custom"><input class="inp" id="iq-custom" placeholder="自定义品牌，如：保时捷" maxlength="8" spellcheck="false"><button type="button" class="st-use" id="iq-custom-btn">使用</button></div><button type="button" class="st-cancel" id="iq-sticker-cancel" style="display:none">✖ 取消贴纸，用回图片链接</button><div id="iq-sticker-preview" style="display:none"><div class="sticker" id="iq-sticker-card"><div class="st-top" id="iq-st-top">共享宝马</div><div class="st-bottom">扫码就能免费开</div><div class="st-qr"><canvas id="iq-st-qr"></canvas></div></div><div class="st-actions"><button type="button" class="dl-btn" onclick="window.print()">🖨️ 打印贴纸</button></div></div></div></div></div>
       <div class="card-title">样式与颜色</div>
       <div class="row r3">
         <div class="field"><label>二维码颜色</label><input type="color" class="inp" id="std-fg" value="#000000"></div>
