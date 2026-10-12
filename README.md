@@ -6,7 +6,7 @@
   <sub>无需注册。无水印。无追踪。没有套路。</sub>
 </p>
 
-> 🌐 **项目说明**：本项目基于 [aixmbcom/qr-studio](https://github.com/aixmbcom/qr-studio)（原作者 [deadboy18](https://github.com/deadboy18)，MIT 协议）汉化并二次开发。v2 新增：合并收款码、图片二维码、iOS 毛玻璃 UI、5 种二维码样式。
+> 🌐 **项目说明**：本项目基于 [aixmbcom/qr-studio](https://github.com/aixmbcom/qr-studio)（原作者 [deadboy18](https://github.com/deadboy18)，MIT 协议）汉化并二次开发。v2 新增：合并收款码（含 5 套主题）、图片二维码、iOS 毛玻璃 UI、5 种二维码样式。v3：移除 ChromaCode；图片码改为填链接（不存储任何数据）。
 
 <p align="center">
   <a href="https://deadboy18.github.io/qr-studio">
@@ -24,7 +24,7 @@
 
 ## 在线二维码处理工具是什么？
 
-一款专业级二维码处理工具，完全在浏览器中运行。支持 **12 种数据类型**（含 🇲🇾 DuitNow、🖼️ 图片码）、**微信+支付宝合并收款码**、**ChromaCode 图像融合马赛克码**、带 **DuitNow EMV 解析的完整二维码扫描器**、**5 种二维码样式**、**实时预览**，可导出 **PNG 和 SVG**。
+一款专业级二维码处理工具，完全在浏览器中运行。支持 **12 种数据类型**（含 🇲🇾 DuitNow、🖼️ 图片码）、**微信+支付宝合并收款码**（5 套主题）、带 **DuitNow EMV 解析的完整二维码解析器**、**5 种二维码样式**、**实时预览**，可导出 **PNG 和 SVG**。
 
 市面上大多数二维码生成器都是臃肿的 SaaS：基础功能收费、二维码上打水印、下载个 PNG 还要注册账号。这里一样都不做。
 
@@ -35,16 +35,18 @@
 ### 标准模式
 - **12 种数据类型** — 网址、文本、WiFi、邮件、电话、短信、WhatsApp、位置、日历事件、电子名片、🇲🇾 DuitNow、🖼️ 图片码
 - **实时预览** — 输入即生成，无需点"生成"按钮
-- **5 种二维码样式** — ⬛ 经典方块、🔳 圆角、⚫ 墨点、💧 水滴、🌈 霓虹渐变（均经真机解码验证可扫）
+- **5 种二维码样式** — ⬛ 经典方块、🔳 圆角、⚫ 墨点、🔷 菱形、🌈 霓虹渐变（均经真机解码验证可扫）
 - **完整自定义** — 前景/背景颜色、7 套预设、对比度警告
 
 ### 合并收款码
 - **微信 + 支付宝二合一** — 上传两张收款码，物理合并为一张：微信扫走微信、支付宝扫走支付宝
+- **5 套主题** — 默认 / 支付宝蓝 / 微信绿 / 中国红 / 深邃夜，下载的 PNG 自带主题背景
 - **纯本地处理** — 解码校验与合并全在浏览器完成，图片不上传
 - 参考 [PayQrcode](https://github.com/uxiaohan/PayQrcode) 的物理合并方案
 
 ### 图片码
-- **上传图片生成二维码** — 手机扫码即查看图片，云端存储长期有效
+- **填图片链接生成二维码** — 手机扫码即打开图片链接查看
+- **不存储任何数据** — 本工具为纯在线处理，不上传、不保存任何图片与数据；有图床请用自己的图床，没有可自行搜索免费图床
 - **中心 Logo** — 上传任意图片作为中心 Logo，自动留白
 - **描边与外框** — 可调的静区和边框选项
 - **节日模板** — 圣诞节、万圣节、新年、复活节、情人节、圣帕特里克节、生日边框
@@ -66,16 +68,7 @@
 
 > ⚠️ **注意：** 生成的二维码 EMV 格式和 CRC 都正确，但**不会处理真实付款**——商户/二维码 ID 必须是通过 PayNet 在收单银行注册的真实 ID。适合开发者测试 EMV 解析器或学习 DuitNow 二维码结构。参考 [natsu90 的研究](https://github.com/natsu90/emvqr/issues/1)。
 
-### ChromaCode 模式
-- **图像融合马赛克二维码** — 在保持可扫的前提下，把品牌图片视觉融入二维码
-- **自动获取网站图标** — 输入网址，自动抓取该网站的 favicon
-- **上传或图片链接** — 任意图片都可作为品牌图源
-- **5 版本轮播** — 预览对比二维码版本 7、10、13、15、18
-- **高级调参** — 圆点形状（圆形/圆角/方形）、深色点范围、幻影强度、幻影阈值
-- **自动调参** — 根据图片特征智能调整参数
-- **调色板提取** — 提取并展示源图片的主色
-
-### 🇲🇾 扫码 — DuitNow 二维码解析
+### 🇲🇾 解析二维码 — DuitNow 二维码解析
 - **相机、文件、粘贴** — 通过相机、图片上传或剪贴板粘贴扫描二维码
 - **DuitNow EMV 解码** — DuitNow 和 JomPAY 二维码逐字段完整解析
 - **70 家收单机构查询** — 按收单机构 ID 识别银行/钱包（[PayNet 官方列表](https://docs.developer.paynet.my/docs/duitNow-QR/integration/QR-generation-specification/merchant-presented-mode/qr-data-object#acquirer-id-id-01)）
@@ -96,7 +89,7 @@
 - **移动端优先的响应式** — 手机、平板、桌面都完美适配
 - **分享 API** — 支持的设备上可调用系统分享
 - **单个 HTML 文件** — 整个应用就是一个文件，无构建步骤、无框架、无 node_modules
-- **隐私优先** — 全部在客户端运行，数据不离开你的浏览器
+- **隐私优先** — 全部在客户端运行，数据不离开你的浏览器；本站不存储任何图片与数据
 - **彩蛋** — 👀 _好奇的话打开控制台看看_
 
 ---
@@ -118,7 +111,7 @@ cd qr-studio
 ```
 qr-studio/
 ├── index.html     ← 整个应用（单个文件）
-├── worker.js      ← ChromaCode 网站图标代理的 Cloudflare Worker（可选）
+├── worker.js      ← CORS 图片代理的 Cloudflare Worker（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -138,15 +131,13 @@ qr-studio/
 |-------|-----------|
 | **页面与逻辑** | 原生 HTML、CSS、JavaScript |
 | **二维码引擎** | [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (1.4.4) |
-| **图片存储** | Cloudflare R2（图片码功能） |
 | **二维码扫描** | [jsQR](https://github.com/cozmo/jsQR) (1.4.0，懒加载) |
-| **ChromaCode 算法** | [Toms Nimanis / IT Linden](https://github.com/TomsNimanis/chromacode) |
 | **DuitNow EMV 规范** | [PayNet QR 规范 v1.5](https://docs.developer.paynet.my/docs/duitNow-QR/integration/QR-generation-specification/merchant-presented-mode/qr-data-object) |
 | **DuitNow 研究** | [natsu90](https://github.com/natsu90/duitnowqr-test) |
 | **字体** | DM Sans + JetBrains Mono (Google Fonts) |
 | **构建系统** | 无，就是一个文件 |
 | **后端** | 无，纯客户端 |
-| **CORS 代理** | [Cloudflare Worker](https://workers.cloudflare.com)（可选，用于 ChromaCode 获取网站图标） |
+| **CORS 代理** | [Cloudflare Worker](https://workers.cloudflare.com)（图片代理，可选） |
 | **追踪** | 无，我们尊重你的隐私 |
 
 ---
@@ -169,39 +160,6 @@ qr-studio/
 
 ---
 
-## ChromaCode 网站图标代理（可选）
-
-ChromaCode 的**网站图标**页签会自动抓取网站图标融入二维码。因为浏览器会拦截跨域图片请求（CORS），所以需要一个代理。没有代理的话，**上传**和**图片链接**页签照常可用。
-
-一个免费的 [Cloudflare Worker](https://workers.cloudflare.com) 就可以做你自己的 CORS 代理（每天 100,000 次请求免费）。
-
-### 搭建（2 分钟）
-
-1. 在 [workers.cloudflare.com](https://workers.cloudflare.com) 注册（免费）
-2. 点击 **Create Worker** → **Start with Hello World!**
-3. 命名为 `qr-proxy`
-4. 点击 **Edit Code**，删掉全部内容，粘贴 [`worker.js`](worker.js) 的内容
-5. 点击 **Deploy**
-6. 测试一下 —— 用测试图标访问你的 Worker 地址：
-   ```
-   https://qr-proxy.YOUR-SUBDOMAIN.workers.dev/?url=https://www.google.com/favicon.ico
-   ```
-   能看到 Google 的图标就说明成功了。
-7. 打开 `index.html`，找到这一行并填入你的 Worker 地址：
-   ```javascript
-   const MY_PROXY = ''; // ← 把你的 Worker 地址粘贴到这里
-   ```
-   ```javascript
-   const MY_PROXY = 'https://qr-proxy.YOUR-SUBDOMAIN.workers.dev';
-   ```
-8. Push 到 GitHub —— 搞定，ChromaCode 的网站图标抓取对任意网站都可用了。
-
-### 不用代理
-
-会用公共 CORS 代理（`allorigins.win`、`codetabs.com`）作为兜底。对大多数网站可用，但可能较慢或屏蔽某些域名。上传页签不受影响，永远可用。
-
----
-
 ## 参与贡献
 
 欢迎贡献！有新功能想法、发现 bug，或想改进代码：
@@ -220,7 +178,8 @@ ChromaCode 的**网站图标**页签会自动抓取网站图标融入二维码�
 
 **原作者 [deadboy18](https://github.com/deadboy18)**
 
-ChromaCode 算法：[Toms Nimanis / IT Linden](https://github.com/TomsNimanis/chromacode)
+
+合并收款码物理合并方案：[uxiaohan/PayQrcode](https://github.com/uxiaohan/PayQrcode)
 
 DuitNow EMV 研究：[natsu90](https://github.com/natsu90/duitnowqr-test) · 收单机构数据来源：[PayNet QR 规范 v1.5](https://docs.developer.paynet.my/docs/duitNow-QR/integration/QR-generation-specification/merchant-presented-mode/qr-data-object) · [PayNet 开发者文档](https://docs.developer.paynet.my/docs)
 
