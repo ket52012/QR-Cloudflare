@@ -333,7 +333,7 @@ body *{visibility:hidden!important}
   <div class="sec" id="sec-scanner">
     <div class="card">
       <div class="card-title">解析二维码</div>
-      <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px;line-height:1.6">用<strong>相机</strong>、<strong>图片文件</strong>或从剪贴板<strong>粘贴</strong>，解码任意二维码。所有处理都在本地完成——数据不会离开你的浏览器。<br><span style="color:var(--accent);font-weight:500">🇲🇾 完整 DuitNow 二维码解析</span> — 70 家收单机构/银行（PayNet 官方列表）、CRC 校验、小费/手续费解析、干净二维码重新生成。</p>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px;line-height:1.6">用<strong>相机</strong>、<strong>图片文件</strong>或从剪贴板<strong>粘贴图片 / 图片链接</strong>，解码任意二维码。所有处理都在本地完成——数据不会离开你的浏览器。<br><span style="color:var(--accent);font-weight:500">🇲🇾 完整 DuitNow 二维码解析</span> — 70 家收单机构/银行（PayNet 官方列表）、CRC 校验、小费/手续费解析、干净二维码重新生成。</p>
       <div style="margin-bottom:14px">
         <button class="gen-btn" id="cam-btn" onclick="toggleCamera()" style="margin-bottom:8px">📷 打开相机</button>
         <div id="cam-wrap" style="display:none;position:relative;max-width:440px;margin:0 auto;border-radius:var(--radius-lg);overflow:hidden;background:#000">
@@ -345,7 +345,7 @@ body *{visibility:hidden!important}
         <div style="font-size:.72rem;color:var(--text3);margin-top:6px;text-align:center">🔒 相机权限仅在浏览器内使用。我们不会录制、存储或传输视频。</div>
       </div>
       <hr class="sep">
-      <div class="dz" id="scan-dz" style="padding:28px 16px"><div style="font-size:1.4rem;margin-bottom:6px">📁</div><span id="scan-dp">拖放图片、点击浏览，或粘贴 (Ctrl+V)</span><input type="file" id="scan-fi" accept="image/*"></div>
+      <div class="dz" id="scan-dz" style="padding:28px 16px"><div style="font-size:1.4rem;margin-bottom:6px">📁</div><span id="scan-dp">拖放图片、点击浏览，或粘贴图片 / 图片链接 (Ctrl+V)</span><input type="file" id="scan-fi" accept="image/*"></div>
       <canvas id="scan-canvas" style="display:none"></canvas>
     </div>
     <div id="scan-result" style="display:none">
@@ -835,7 +835,7 @@ document.getElementById('pm-ratio').oninput=function(){document.getElementById('
 let camStream=null,camRunning=false,scanResultData='';
 
 // Paste support
-document.addEventListener('paste',e=>{const sec=document.getElementById('sec-scanner');if(!sec||!sec.classList.contains('on'))return;const cd=e.clipboardData;if(!cd)return;const dp=document.getElementById('scan-dp');const items=cd.items||[];for(const item of items){if(item.type&&item.type.indexOf('image/')===0){const f=item.getAsFile();if(f){e.preventDefault();scanFile(f);return}}}const files=cd.files||[];for(const f of files){if((f.type&&f.type.indexOf('image/')===0)||/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(f.name||'')){e.preventDefault();scanFile(f);return}}if((items.length||files.length)&&dp){dp.innerHTML='<span style="color:var(--warn)">检测到粘贴内容，但其中没有图片<br><span class="fname">请复制图片后再粘贴 (Ctrl+V)</span></span>'}});
+document.addEventListener('paste',e=>{const sec=document.getElementById('sec-scanner');if(!sec||!sec.classList.contains('on'))return;const cd=e.clipboardData;if(!cd)return;const dp=document.getElementById('scan-dp');const items=cd.items||[];for(const item of items){if(item.type&&item.type.indexOf('image/')===0){const f=item.getAsFile();if(f){e.preventDefault();scanFile(f);return}}}const files=cd.files||[];for(const f of files){if((f.type&&f.type.indexOf('image/')===0)||/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(f.name||'')){e.preventDefault();scanFile(f);return}}let txt='';try{txt=(cd.getData('text')||'').trim()}catch(err){}if(/^https?:\/\/\S+$/i.test(txt)){e.preventDefault();scanImageUrl(txt);return}if((items.length||files.length||txt)&&dp){dp.innerHTML='<span style="color:var(--warn)">检测到粘贴内容，但其中没有图片<br><span class="fname">请复制图片、图片文件或图片链接后再粘贴 (Ctrl+V)</span></span>'}});
 
 // File/drop
 const scanDz=document.getElementById('scan-dz'),scanFi=document.getElementById('scan-fi');
@@ -845,7 +845,9 @@ scanDz.ondragleave=()=>scanDz.classList.remove('ov');
 scanDz.ondrop=e=>{e.preventDefault();scanDz.classList.remove('ov');scanFile(e.dataTransfer.files[0])};
 scanFi.onchange=e=>scanFile(e.target.files[0]);
 
-function scanFile(f){const dp=document.getElementById('scan-dp');if(!f){return}if(f.type&&f.type.indexOf('image/')!==0&&!/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(f.name||'')){if(dp)dp.innerHTML='<span style="color:var(--warn)">这不是图片文件<br><span class="fname">请选择图片格式 (PNG/JPG/GIF/WebP)</span></span>';return}if(typeof jsQR==='undefined'){document.getElementById('scan-dp').innerHTML='<span style="color:var(--warn)">扫描器加载中…请稍后再试</span>';return}const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const c=document.getElementById('scan-canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const id=ctx.getImageData(0,0,c.width,c.height);const code=jsQR(id.data,c.width,c.height,{inversionAttempts:'attemptBoth'});if(code){showScanResult(code.data);document.getElementById('scan-dp').innerHTML=`<img class="preview" src="${r.result}" style="max-width:80px;max-height:80px"><br><span class="fname" style="color:var(--ok)">✓ 已找到二维码</span>`}else document.getElementById('scan-dp').innerHTML=`<span style="color:var(--err)">✕ 未检测到二维码</span><br><span class="fname">请换一张更清晰的图片</span>`};img.src=r.result};r.readAsDataURL(f)}
+function decodeScanImage(img,previewSrc){const dp=document.getElementById('scan-dp');if(typeof jsQR==='undefined'){if(dp)dp.innerHTML='<span style="color:var(--warn)">扫描器加载中…请稍后再试</span>';return}const c=document.getElementById('scan-canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);let code=null;try{code=jsQR(ctx.getImageData(0,0,c.width,c.height).data,c.width,c.height,{inversionAttempts:'attemptBoth'})}catch(err){if(dp)dp.innerHTML='<span style="color:var(--err)">图片读取被拦截<br><span class="fname">该图床有防盗链，请下载后拖放/粘贴图片</span></span>';return}if(code){showScanResult(code.data);if(dp)dp.innerHTML=`<img class="preview" src="${previewSrc}" style="max-width:80px;max-height:80px"><br><span class="fname" style="color:var(--ok)">✓ 已找到二维码</span>`}else if(dp)dp.innerHTML='<span style="color:var(--err)">✕ 未检测到二维码</span><br><span class="fname">请换一张更清晰的图片</span>'}
+function scanFile(f){const dp=document.getElementById('scan-dp');if(!f){return}if(f.type&&f.type.indexOf('image/')!==0&&!/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(f.name||'')){if(dp)dp.innerHTML='<span style="color:var(--warn)">这不是图片文件<br><span class="fname">请选择图片格式 (PNG/JPG/GIF/WebP)</span></span>';return}const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>decodeScanImage(img,r.result);img.onerror=()=>{if(dp)dp.innerHTML='<span style="color:var(--err)">图片读取失败</span>'};img.src=r.result};r.readAsDataURL(f)}
+function scanImageUrl(url){const dp=document.getElementById('scan-dp');if(dp)dp.innerHTML='<span style="color:var(--text2)">正在加载图片…</span>';const img=new Image();img.crossOrigin='anonymous';img.onload=()=>decodeScanImage(img,img.src);img.onerror=()=>{if(dp)dp.innerHTML='<span style="color:var(--err)">图片加载失败<br><span class="fname">该链接可能有防盗链或不是直链，请下载后拖放/粘贴图片</span></span>'};img.src=location.origin+'/?url='+encodeURIComponent(url)}
 
 // Camera
 async function toggleCamera(){if(camRunning){stopCamera();return}try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});document.getElementById('cam-video').srcObject=camStream;document.getElementById('cam-wrap').style.display='block';document.getElementById('cam-btn').textContent='⏹ 关闭相机';camRunning=true;requestAnimationFrame(scanFrame)}catch(e){alert(e.name==='NotAllowedError'?'相机权限被拒绝。本工具仅需要相机权限来扫描二维码——不会录制或传输视频。':'无法访问相机：'+e.message)}}
@@ -1035,7 +1037,7 @@ if(w.length)return{level:'warning',detail:w.map(x=>'• '+x).join('<br>')};
 return{level:'safe',detail:'未发现威胁。'}}
 
 function copyScanResult(){navigator.clipboard.writeText(scanResultData).then(()=>{const b=document.querySelector('#scan-result .dl-btn');b.textContent='✓ 已复制！';setTimeout(()=>b.textContent='📋 复制',1500)})}
-function clearScan(){document.getElementById('scan-result').style.display='none';document.getElementById('duitnow-card').style.display='none';document.getElementById('duitnow-regen').style.display='none';document.getElementById('scan-dp').textContent='拖放图片、点击浏览，或粘贴 (Ctrl+V)';document.getElementById('scan-safety-card').style.borderColor='var(--border)';scanResultData='';scanFi.value=''}
+function clearScan(){document.getElementById('scan-result').style.display='none';document.getElementById('duitnow-card').style.display='none';document.getElementById('duitnow-regen').style.display='none';document.getElementById('scan-dp').textContent='拖放图片、点击浏览，或粘贴图片 / 图片链接 (Ctrl+V)';document.getElementById('scan-safety-card').style.borderColor='var(--border)';scanResultData='';scanFi.value=''}
 
 // ═══════ DUITNOW REGEN (TukarQR) ═══════
 let dnTargetW=600;
